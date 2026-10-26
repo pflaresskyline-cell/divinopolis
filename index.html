@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Vendas</title>
+<style>
+:root{--primary:#2563eb;--dark:#0f172a;--bg:#f1f5f9;--card:#fff;--text:#1e293b;--muted:#64748b;--danger:#dc2626;--success:#16a34a;--warning:#d97706}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden{display:none!important}
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f172a,#2563eb)}
+.login-card{width:min(430px,92%);background:#fff;border-radius:18px;padding:32px;box-shadow:0 20px 60px #0004;text-align:center}.login-logo{max-height:110px;max-width:280px;object-fit:contain;margin-bottom:18px}.login-card h1{margin:0 0 8px}.login-card p{color:var(--muted)}
+.form-group{margin:12px 0;text-align:left}.form-group label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}.form-group input,.form-group select,.form-group textarea{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:9px;background:#fff}.form-group textarea{min-height:90px;resize:vertical}
+.input-with-btn,.doc-group{display:flex;gap:6px}.input-with-btn input,.doc-group input{flex:1}.doc-type-select{width:110px!important;flex-shrink:0}
+.btn-search-cep{padding:0 14px;border-radius:9px;background:var(--primary);color:#fff;font-size:16px;display:inline-flex;align-items:center;justify-content:center;transition:background .2s}.btn-search-cep:hover{background:#1d4ed8}
+.btn{padding:10px 15px;border-radius:9px;font-weight:700}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:#e2e8f0;color:var(--dark)}.btn-danger{background:var(--danger);color:#fff}.btn-success{background:var(--success);color:#fff}.btn-warning{background:var(--warning);color:#fff}
+#app{min-height:100vh}.topbar{height:64px;background:var(--dark);color:#fff;display:flex;align-items:center;padding:0 20px;gap:18px;position:sticky;top:0;z-index:10}.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800}.brand img{height:42px;max-width:150px;object-fit:contain}.topbar .spacer{flex:1}.user-chip{background:#ffffff15;padding:8px 12px;border-radius:20px;font-size:13px}
+.layout{display:flex;min-height:calc(100vh - 64px)}.sidebar{width:245px;background:#fff;border-right:1px solid #e2e8f0;padding:15px}.nav-btn{display:block;width:100%;padding:12px 13px;text-align:left;background:transparent;border-radius:9px;margin:3px 0;color:#334155;font-weight:650}.nav-btn:hover,.nav-btn.active{background:#dbeafe;color:#1d4ed8}.content{flex:1;padding:24px;overflow:auto}.page{display:none}.page.active{display:block}.page-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.page-title h2{margin:0}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px}.card{background:var(--card);border:1px solid #e2e8f0;border-radius:14px;padding:18px;box-shadow:0 2px 8px #0f172a08}.metric{font-size:27px;font-weight:800;margin-top:6px}.muted{color:var(--muted);font-size:13px}.alert{padding:13px;border-radius:10px;margin:8px 0}.alert.warning{background:#fef3c7;color:#92400e}.alert.danger{background:#fee2e2;color:#991b1b}.alert.success{background:#dcfce7;color:#166534}
+.table-wrap{overflow:auto;background:#fff;border:1px solid #e2e8f0;border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:13px}.table th{background:#f8fafc;position:sticky;top:0}.actions{display:flex;gap:6px;flex-wrap:wrap}.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:15px}.filters input,.filters select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px}
+.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:15px;z-index:50}.modal-box{background:#fff;border-radius:15px;width:min(900px,100%);max-height:92vh;overflow:auto;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.modal-head h3{margin:0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.grid .full{grid-column:1/-1}.logo-preview{max-height:90px;max-width:250px;object-fit:contain;border:1px dashed #cbd5e1;border-radius:8px;padding:8px}
+.badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800}.badge.Vendido{background:#dbeafe;color:#1d4ed8}.badge.Instalado{background:#dcfce7;color:#166534}.badge.Pendente,.badge.PendenteBKO{background:#fef3c7;color:#92400e}.badge.Cancelado{background:#fee2e2;color:#991b1b}.badge.Concluído{background:#dcfce7;color:#166534}
+@media(max-width:800px){.sidebar{width:68px;padding:8px}.nav-btn{font-size:0;text-align:center}.nav-btn:first-letter{font-size:18px}.content{padding:14px}.grid{grid-template-columns:1fr}.topbar{padding:0 10px}.brand span{display:none}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+<div id="login">
+  <div class="login-card">
+    <img id="loginLogo" class="login-logo hidden">
+    <h1 id="loginTitle">Sistema de Vendas</h1>
+    <p>Entre com seu usuário e senha</p>
+    <div class="form-group"><label>Usuário</label><input id="loginUser" autocomplete="username"></div>
+    <div class="form-group"><label>Senha</label><input id="loginPass" type="password" autocomplete="current-password"></div>
+    <button class="btn btn-primary" style="width:100%;margin-top:8px" onclick="login()">Entrar</button>
+    <p id="loginError" style="color:#dc2626;font-weight:700"></p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+<header class="topbar">
+  <div class="brand"><img id="brandLogo" class="hidden"><span id="brandName">Sistema de Vendas</span></div>
+  <div class="spacer"></div><div class="user-chip" id="currentUser"></div>
+  <button class="btn btn-secondary" onclick="logout()">Sair</button>
+</header>
+<div class="layout">
+<aside class="sidebar">
+  <button class="nav-btn active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+  <button class="nav-btn" onclick="showPage('vendas',this)">🛒 Vendas</button>
+  <button class="nav-btn" onclick="showPage('vendasIndividuais',this)">📦 Venda de Produto Individual</button>
+  <button class="nav-btn" onclick="showPage('atendimentos',this)">🎧 Atendimento</button>
+  <button class="nav-btn" onclick="showPage('relatorios',this)">📈 Relatórios</button>
+  <button class="nav-btn" onclick="showPage('ajuda',this)">❓ Ajuda</button>
+  <button class="nav-btn privileged-only" onclick="showPage('config',this)">⚙️ Configuração</button>
+</aside>
+<main class="content">
+<section id="dashboard" class="page active">
+ <div class="page-title"><h2>Dashboard</h2><button class="btn btn-primary" onclick="openSale()">+ Nova venda</button></div>
+ <div class="card" style="margin-bottom:18px"><h3 style="margin-top:0">Filtros do Dashboard</h3><div class="filters">
+ <input id="dData" type="date" title="Dia" onchange="renderDashboard()">
+ <select id="dMes" onchange="renderDashboard()"><option value="">Mês</option></select>
+ <select id="dAno" onchange="renderDashboard()"><option value="">Ano</option></select>
+ <select id="dVendedor" onchange="renderDashboard()"><option value="">Vendedor</option></select>
+ <select id="dPDV" onchange="renderDashboard()"><option value="">PDV</option></select>
+ <select id="dOperadora" onchange="renderDashboard()"><option value="">Operadora</option></select>
+ <select id="dPlano" onchange="renderDashboard()"><option value="">Plano</option></select>
+ <button class="btn btn-secondary" onclick="clearDashboardFilters()">Limpar filtros</button>
+ </div></div>
+ <div id="alerts"></div>
+ <div class="cards">
+  <div class="card"><div class="muted">Quantidade de vendas</div><div class="metric" id="mVendas">0</div></div>
+  <div class="card"><div class="muted">Instaladas</div><div class="metric" id="mInstaladas">0</div></div>
+  <div class="card"><div class="muted">Pendentes</div><div class="metric" id="mPendentes">0</div></div>
+  <div class="card"><div class="muted">Canceladas</div><div class="metric" id="mCanceladas">0</div></div>
+  <div class="card"><div class="muted">Valor vendido</div><div class="metric" id="mValor">R$ 0,00</div></div>
+   <div class="card"><div class="muted">Comissão prevista</div><div class="metric" id="mComissao">R$ 0,00</div></div>
+   <div class="card"><div class="muted">Vendas do mês anterior instaladas neste mês</div><div class="metric" id="mCarried">0</div></div>
+ </div>
+ <div class="card"><h3>Últimas vendas</h3><div id="recentSales"></div></div>
+</section>
+
+<section id="vendas" class="page">
+ <div class="page-title"><h2>Cadastro de Vendas</h2><button class="btn btn-primary" onclick="openSale()">+ Cadastrar venda</button></div>
+ <div class="filters">
+  <input id="fData" type="date" onchange="renderSales()"><select id="fMes" onchange="renderSales()"><option value="">Mês</option></select>
+  <select id="fAno" onchange="renderSales()"><option value="">Ano</option></select>
+  <select id="fStatus" onchange="renderSales()"><option value="">Status</option><option>Vendido</option><option>Instalado</option><option>Pendente</option><option>Cancelado</option><option>Pendente BKO</option></select>
+  <select id="fVendedor" onchange="renderSales()"><option value="">Vendedor</option></select>
+  <select id="fPDV" onchange="renderSales()"><option value="">PDV</option></select>
+  <input id="fContractId" placeholder="ID contrato" oninput="renderSales()">
+  <input id="fLineNumber" placeholder="Número da linha" oninput="renderSales()">
+  <select id="fPlano" onchange="renderSales()"><option value="">Plano</option></select>
+  <select id="fOperadora" onchange="renderSales()"><option value="">Operadora</option></select>
+ </div>
+ <div class="table-wrap"><table class="table"><thead><tr><th>Data</th><th>Cliente</th><th>CPF/CNPJ</th><th>Operadora</th><th>Plano</th><th>Valor</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Ações</th></tr></thead><tbody id="salesBody"></tbody></table></div>
+</section>
+
+<section id="vendasIndividuais" class="page">
+  <div class="page-title"><h2>Venda de Produtos Individuais</h2><button class="btn btn-primary" onclick="openIndividualSale()">+ Nova venda</button></div>
+  <div class="card"><div class="filters">
+    <input id="ipSearch" placeholder="Buscar CPF/CNPJ, nome, telefone ou produto" oninput="renderIndividualSales()">
+    <select id="ipPDV" onchange="renderIndividualSales()"><option value="">PDV</option></select>
+    <input id="ipData" type="date" onchange="renderIndividualSales()">
+    <button class="btn btn-secondary" onclick="clearIndividualFilters()">Limpar</button>
+    <button class="btn btn-success" onclick="exportIndividualExcel()">Exportar Excel</button>
+  </div>
+  <div class="cards"><div class="card"><div class="muted">Vendas</div><div class="metric" id="ipCount">0</div></div><div class="card"><div class="muted">Valor total</div><div class="metric" id="ipValue">R$ 0,00</div></div><div class="card"><div class="muted">Comissão total</div><div class="metric" id="ipCommission">R$ 0,00</div></div></div>
+  <div class="table-wrap"><table class="table" style="min-width:1250px"><thead><tr><th>Data</th><th>CPF/CNPJ</th><th>Cliente</th><th>Telefone</th><th>Produto</th><th>Valor</th><th>Comissão</th><th>Vendedor</th><th>PDV</th><th>Observação</th><th>Ações</th></tr></thead><tbody id="individualSalesBody"></tbody></table></div></div>
+</section>
+
+<section id="atendimentos" class="page">
+ <div class="page-title"><h2>Atendimento</h2><div><button class="btn btn-primary" onclick="openAttendance()">+ Novo atendimento</button><button class="btn btn-secondary" onclick="openReopen()">🔓 Reabrir</button></div></div>
+ <div class="card"><div class="filters"><input id="searchProtocol" placeholder="Buscar por protocolo, CPF/CNPJ ou nome" oninput="renderAttendances()"><select id="attStatus" onchange="renderAttendances()"><option value="">Todos os status</option></select><select id="attPDV" onchange="renderAttendances()"><option value="">PDV</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Protocolo</th><th>Data/hora</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone</th><th>Motivo</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Ações</th></tr></thead><tbody id="attBody"></tbody></table></div></div>
+</section>
+
+<section id="relatorios" class="page"><div class="page-title"><h2>Relatórios</h2><div><button class="btn btn-success" onclick="exportCSV('sales')">Exportar vendas</button><button class="btn btn-success" onclick="exportCSV('attendance')">Exportar atendimentos</button></div></div><div class="card"><h3>Relatório de Vendas</h3><div class="filters"><input id="rData" type="date" onchange="renderReports()"><select id="rMes" onchange="renderReports()"><option value="">Mês</option></select><select id="rAno" onchange="renderReports()"><option value="">Ano</option></select><select id="rVendedor" onchange="renderReports()"><option value="">Vendedor</option></select><select id="rPDV" onchange="renderReports()"><option value="">PDV</option></select><select id="rOperadora" onchange="renderReports()"><option value="">Operadora</option></select><select id="rPlano" onchange="renderReports()"><option value="">Plano</option></select><select id="rStatus" onchange="renderReports()"><option value="">Status</option><option>Vendido</option><option>Instalado</option><option>Pendente</option><option>Pendente BKO</option><option>Cancelado</option></select><button class="btn btn-secondary" onclick="clearReportFilters()">Limpar</button></div><div class="cards"><div class="card"><b>Vendas</b><div class="metric" id="rVendas">0</div></div><div class="card"><b>Valor total</b><div class="metric" id="rValor">R$ 0,00</div></div></div><div class="table-wrap"><table class="table" style="min-width:1250px"><thead><tr><th>Data</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone(s)</th><th>Operadora</th><th>Plano</th><th>Valor</th><th>Comissão</th><th>Instalação</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Endereço</th><th>Observação</th></tr></thead><tbody id="reportSalesBody"></tbody></table></div></div><div class="card" style="margin-top:18px"><h3>Relatório de Atendimentos</h3><div class="table-wrap"><table class="table" style="min-width:1000px"><thead><tr><th>Protocolo</th><th>Data/Hora</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone</th><th>Motivo</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Observação</th></tr></thead><tbody id="reportAttBody"></tbody></table></div></div></section>
+
+<section id="ajuda" class="page">
+ <div class="page-title"><h2>Links de Ajuda e Manuais</h2></div>
+ <div class="card">
+  <p class="muted">Acesse abaixo os links úteis e pastas cadastrados no sistema:</p>
+  <div class="table-wrap">
+   <table class="table">
+    <thead><tr><th>Descrição</th><th>Link</th></tr></thead>
+    <tbody id="helpLinksBody"></tbody>
+   </table>
+  </div>
+ </div>
+</section>
+
+<section id="config" class="page">
+ <div class="page-title"><h2>Configuração</h2></div>
+ <div class="cards">
+  <div class="card"><h3>Usuários</h3><p class="muted">Login e senha para entrar no sistema.</p><button class="btn btn-primary" onclick="manage('users')">Gerenciar</button></div>
+  <div class="card"><h3>Vendedores</h3><p class="muted">Nome, CPF, telefone, PDV e permissão.</p><button class="btn btn-primary" onclick="manage('sellers')">Gerenciar</button></div>
+  <div class="card"><h3>Operadoras</h3><p class="muted">Cadastre operadoras e seus planos/valores.</p><button class="btn btn-primary" onclick="manage('operators')">Gerenciar</button></div>
+  <div class="card"><h3>PDVs</h3><p class="muted">Cadastre pontos de venda relacionados aos vendedores.</p><button class="btn btn-primary" onclick="manage('pdvs')">Gerenciar</button></div>
+  <div class="card"><h3>Atendimentos</h3><p class="muted">Motivos, status e senha de reabertura.</p><button class="btn btn-primary" onclick="manage('attendanceConfig')">Gerenciar</button></div>
+  <div class="card"><h3>Links de Ajuda</h3><p class="muted">Cadastre links úteis e pastas para a equipe.</p><button class="btn btn-primary" onclick="manage('helpLinks')">Gerenciar</button></div><div class="card"><h3>Produtos Individuais</h3><p class="muted">Cadastre produtos, valores, comissão e PDVs.</p><button class="btn btn-primary" onclick="manage('individualProducts')">Gerenciar</button></div>
+  <div class="card"><h3>Sistema</h3><p class="muted">Nome e logo grande do sistema.</p><button class="btn btn-primary" onclick="manage('system')">Editar</button></div>
+ </div>
+</section>
+</main></div></div>
+
+<div id="modal" class="modal hidden"><div class="modal-box"><div class="modal-head"><h3 id="modalTitle"></h3><button class="btn btn-secondary" onclick="closeModal()">Fechar</button></div><div id="modalBody"></div></div></div>
+
+<script>
+/* ==========================================================
+   SUPABASE CONFIGURATION
+   ========================================================== */
+const SUPABASE_URL = 'https://hqowqbiptsigdcupxwea.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxb3dxYmlwdHNpZ2RjdXB4d2VhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkwNDgzNjMsImV4cCI6MjEwNDYyNDM2M30.LXG62GxqSlQpqiVhg4gk5NhlAXFLhQKu6A5beuXvR50';
+const { createClient } = window.supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let db={settings:{name:'Sistema de Vendas',logo:''},users:[],sellers:[],pdvs:[],operators:[],plans:[],attendanceConfig:{reasons:[],statuses:[]},sales:[],attendances:[],helpLinks:[],individualProducts:[],individualSales:[]};
+let current=null;
+const $=id=>document.getElementById(id);
+const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const today=()=>new Date().toISOString().slice(0,10);
+
+/* ==========================================================
+   MÁSCARAS E VALIDAÇÕES DE CPF E CNPJ
+   ========================================================== */
+function docDigits(v){return String(v??'').replace(/\D/g,'')}
+
+function isValidCPF(v){
+  const c = docDigits(v);
+  if (c.length !== 11 || /^(\d)\1{10}$/.test(c)) return false;
+  let sum = 0;
+  for (let i = 0; i < 9; i++) sum += Number(c[i]) * (10 - i);
+  let d = (sum * 10) % 11;
+  if (d === 10) d = 0;
+  if (d !== Number(c[9])) return false;
+  sum = 0;
+  for (let i = 0; i < 10; i++) sum += Number(c[i]) * (11 - i);
+  d = (sum * 10) % 11;
+  if (d === 10) d = 0;
+  return d === Number(c[10]);
+}
+
+function isValidCNPJ(v){
+  const c = docDigits(v);
+  if (c.length !== 14 || /^(\d)\1{13}$/.test(c)) return false;
+  let size = c.length - 2;
+  let numbers = c.substring(0, size);
+  const digits = c.substring(size);
+  let sum = 0;
+  let pos = size - 7;
+  for (let i = size; i >= 1; i--) {
+    sum += Number(numbers.charAt(size - i)) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  if (result !== Number(digits.charAt(0))) return false;
+  size = size + 1;
+  numbers = c.substring(0, size);
+  sum = 0;
+  pos = size - 7;
+  for (let i = size; i >= 1; i--) {
+    sum += Number(numbers.charAt(size - i)) * pos--;
+    if (pos < 2) pos = 9;
+  }
+  result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+  return result === Number(digits.charAt(1));
+}
+
+function formatCPF(v){
+  const c = docDigits(v).slice(0,11);
+  return c.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+}
+
+function formatCNPJ(v){
+  const c = docDigits(v).slice(0,14);
+  return c.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+}
+
+function formatDoc(v, type='CPF'){
+  const digits = docDigits(v);
+  if (type === 'CNPJ') {
+    if (digits.length === 14) return formatCNPJ(digits);
+    return digits;
+  }
+  if (digits.length === 11) return formatCPF(digits);
+  return digits;
+}
+
+function validateCPFField(id, required=false, typeId=null){
+  const el = $(id);
+  if (!el) return true;
+  const docType = typeId && $(typeId) ? $(typeId).value : (docDigits(el.value).length > 11 ? 'CNPJ' : 'CPF');
+  const raw = String(el.value || '').trim();
+  const oldMsg = el.parentElement?.parentElement?.querySelector('.cpf-error') || el.parentElement?.querySelector('.cpf-error');
+  oldMsg?.remove();
+  el.style.borderColor = '';
+
+  const showDocError = (msg) => {
+    el.style.borderColor = 'var(--danger)';
+    const msgEl = document.createElement('div');
+    msgEl.className = 'cpf-error';
+    msgEl.style.cssText = 'color:var(--danger);font-size:12px;font-weight:700;margin-top:5px;grid-column:1/-1';
+    msgEl.textContent = msg;
+    const container = el.parentElement?.classList.contains('doc-group') ? el.parentElement.parentElement : el.parentElement;
+    container?.appendChild(msgEl);
+    el.focus();
+  };
+
+  if (!raw) {
+    if (required) {
+      showDocError(`INFORME UM ${docType} VÁLIDO.`);
+      return false;
+    }
+    return true;
+  }
+
+  const isValid = docType === 'CNPJ' ? isValidCNPJ(raw) : isValidCPF(raw);
+  if (!isValid) {
+    showDocError(`${docType} INVÁLIDO. INFORME UM ${docType} VÁLIDO.`);
+    return false;
+  }
+
+  el.value = formatDoc(raw, docType);
+  return true;
+}
+
+function setupCPFField(el, typeSelectId=null){
+  if (!el || el.dataset.cpfReady) return;
+  el.dataset.cpfReady = '1';
+  el.inputMode = 'numeric';
+  
+  const updateConfig = () => {
+    const type = typeSelectId && $(typeSelectId) ? $(typeSelectId).value : 'CPF';
+    el.maxLength = type === 'CNPJ' ? 18 : 14;
+  };
+  
+  updateConfig();
+
+  el.addEventListener('input', () => {
+    const type = typeSelectId && $(typeSelectId) ? $(typeSelectId).value : 'CPF';
+    el.value = formatDoc(el.value, type);
+    el.style.borderColor = '';
+    (el.parentElement?.parentElement?.querySelector('.cpf-error') || el.parentElement?.querySelector('.cpf-error'))?.remove();
+  });
+
+  el.addEventListener('blur', () => {
+    if (el.value.trim()) validateCPFField(el.id, false, typeSelectId);
+  });
+}
+
+function onDocTypeChange(typeId, inputId){
+  const input = $(inputId);
+  if(!input) return;
+  input.maxLength = $(typeId).value === 'CNPJ' ? 18 : 14;
+  input.value = formatDoc(input.value, $(typeId).value);
+  input.style.borderColor = '';
+  (input.parentElement?.parentElement?.querySelector('.cpf-error') || input.parentElement?.querySelector('.cpf-error'))?.remove();
+}
+
+async function searchCep(cepId, ruaId, bairroId, cidadeId, ufId){
+  const cepEl = $(cepId);
+  if(!cepEl) return;
+  const rawCep = cepEl.value.replace(/\D/g, '');
+  if(rawCep.length !== 8){
+    alert('Por favor, informe um CEP válido com 8 dígitos.');
+    return;
+  }
+  try {
+    const res = await fetch(`https://viacep.com.br/ws/${rawCep}/json/`);
+    const data = await res.json();
+    if(data.erro){
+      alert('CEP não encontrado. Digite o endereço manualmente.');
+      return;
+    }
+    if($(ruaId) && data.logradouro) $(ruaId).value = data.logradouro.toUpperCase();
+    if($(bairroId) && data.bairro) $(bairroId).value = data.bairro.toUpperCase();
+    if($(cidadeId) && data.localidade) $(cidadeId).value = data.localidade.toUpperCase();
+    if($(ufId) && data.uf) $(ufId).value = data.uf.toUpperCase();
+  } catch(e) {
+    alert('Erro ao buscar o CEP na internet. Preencha manualmente.');
+  }
+}
+
+const fmtDate=d=>d?new Date(d+'T12:00:00').toLocaleDateString('pt-BR'):'-';
+const roleLabel=r=>({admin:'Admin',supervisor:'Supervisor',bko:'BKO',usuario:'Usuário'})[r]||r;
+const isAdmin=()=>current?.role==='admin';
+const isSupervisor=()=>current?.role==='supervisor';
+const canAll=()=>isAdmin()||isSupervisor();
+const seller=()=>db.sellers.find(s=>Number(s.id)===Number(current?.sellerId));
+const esc=v=>String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+const badge=s=>`<span class="badge ${String(s||'').replaceAll(' ','')}">${esc(s)}</span>`;
+
+function normalizeSettings(r){return r?{...r,logo:r.logo_url??r.logo??''}: {name:'Sistema de Vendas',logo:''}}
+function normalizeSeller(r){return {...r,pdvId:r.pdv_id??r.pdvId}}
+function normalizeProfile(r){return r?{...r,sellerId:r.seller_id??r.sellerId,user:r.username??r.user}:null}
+function normalizeOperator(r){return {...r}}
+function normalizePlan(r){return {...r,operatorId:r.operator_id??r.operatorId}}
+function normalizeSale(r){return {...r,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,operatorId:r.operator_id??r.operatorId,planId:r.plan_id??r.planId,operatorName:r.operator_name??r.operatorName,planName:r.plan_name??r.planName,birthDate:r.birth_date??r.birthDate,motherName:r.mother_name??r.motherName,contractId:r.id_contrato??r.contract_id??r.contractId,lineNumber:r.numero_linha??r.line_number??r.lineNumber,differentInstallAddress:r.different_install_address??r.differentInstallAddress,installDate:r.install_date??r.installDate,installAddress:{cep:r.install_cep??'',street:r.install_street??'',number:r.install_number??'',complement:r.install_complement??'',district:r.install_district??'',city:r.install_city??'',uf:r.install_uf??''},date:r.sale_date??r.date,obs:r.observation??r.obs,phones:r.phones||[],emails:r.emails||[],value:r.value,commission:r.commission,createdAt:r.created_at??r.createdAt,updatedAt:r.updated_at??r.updatedAt}}
+function normalizeIndividualProduct(r){return {...r,pdvIds:r.pdv_ids??r.pdvIds??[],value:r.value??0,commission:r.commission??0,active:r.active!==false}}
+function normalizeIndividualSale(r){return {...r,productId:r.product_id??r.productId,productName:r.product_name??r.productName,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,saleDate:r.sale_date??r.saleDate,value:r.value??0,commission:r.commission??0,obs:r.observation??r.obs,createdAt:r.created_at??r.createdAt}}
+function normalizeAtt(r){return {...r,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,date:r.attendance_date??r.date,obs:r.observation??r.obs}}
+
+async function loadDB(){
+  const [settings,pdvs,sellers,operators,plans,reasons,statuses,sales,atts,profiles,profile,helpLinks,individualProducts,individualSales] = await Promise.all([
+    sb.from('app_settings').select('*').limit(1).maybeSingle(),
+    sb.from('pdvs').select('*').order('name'),
+    sb.from('sellers').select('*').order('name'),
+    sb.from('operators').select('*').order('name'),
+    sb.from('plans').select('*').order('name'),
+    sb.from('attendance_reasons').select('*').eq('active',true).order('name'),
+    sb.from('attendance_statuses').select('*').eq('active',true).order('name'),
+    sb.from('sales').select('*').order('sale_date',{ascending:false}),
+    sb.from('attendances').select('*').order('attendance_date',{ascending:false}),
+    sb.from('profiles').select('*').order('username'),
+    current?.id ? sb.from('profiles').select('*').eq('id',current.id).maybeSingle() : Promise.resolve({data:null,error:null}),
+    sb.from('help_links').select('*').order('title'),
+    sb.from('individual_products').select('*').order('name'),
+    sb.from('individual_sales').select('*').order('sale_date',{ascending:false})
+  ]);
+  for(const x of [settings,pdvs,sellers,operators,plans,reasons,statuses,sales,atts,profiles,profile,helpLinks,individualProducts,individualSales]) if(x?.error && x.error.code!=='PGRST116') throw x.error;
+  db.settings=normalizeSettings(settings.data);
+  db.pdvs=pdvs.data||[];
+  db.sellers=(sellers.data||[]).map(normalizeSeller);
+  db.operators=(operators.data||[]).map(normalizeOperator);
+  db.plans=(plans.data||[]).map(normalizePlan);
+  db.attendanceConfig={reasons:(reasons.data||[]).map(x=>x.name),statuses:(statuses.data||[]).map(x=>x.name)};
+  db.sales=(sales.data||[]).map(normalizeSale);
+  db.attendances=(atts.data||[]).map(normalizeAtt);
+  db.users=(profiles.data||[]).map(normalizeProfile);
+  db.helpLinks=helpLinks.data||[];
+  db.individualProducts=(individualProducts.data||[]).map(normalizeIndividualProduct);
+  db.individualSales=(individualSales.data||[]).map(normalizeIndividualSale);
+  if(profile.data) current={...current,...normalizeProfile(profile.data)};
+}
+
+function fail(err,context=''){
+  console.error(context||'Supabase error',err);
+  const parts=[context,err?.message,err?.details,err?.hint,err?.code].filter(Boolean);
+  alert(parts.join('\n')||'Ocorreu um erro ao comunicar com o Supabase.');
+}
+
+function visibleSales(){let a=db.sales;if(current?.role==='usuario')a=a.filter(x=>Number(x.sellerId)===Number(current.sellerId));if(current?.role==='bko'||current?.role==='supervisor')a=a.filter(x=>Number(x.pdvId)===Number(seller()?.pdvId));return a}
+function visibleAtt(){let a=db.attendances;if(current?.role==='usuario')a=a.filter(x=>Number(x.sellerId)===Number(current.sellerId));if(current?.role==='supervisor'||current?.role==='bko')a=a.filter(x=>Number(x.pdvId)===Number(seller()?.pdvId));return a}
+
+async function login(){
+  const u=$('loginUser').value.trim(),p=$('loginPass').value;
+  if(!u||!p){$('loginError').textContent='Informe usuário e senha.';return;}
+  $('loginError').textContent='Entrando...';
+  try{
+    const {data:profile,error}=await sb.from('profiles')
+      .select('*')
+      .ilike('username',u)
+      .eq('password',p)
+      .eq('active',true)
+      .maybeSingle();
+    if(error){
+      $('loginError').textContent='Erro no acesso aos usuários: '+(error.message||error);
+      console.error('Login/profile error',error);
+      return;
+    }
+    if(!profile){
+      $('loginError').textContent='Usuário ou senha inválidos.';
+      return;
+    }
+    current=normalizeProfile(profile);
+    localStorage.setItem('svendas_profile_id',String(profile.id));
+    $('loginError').textContent='';
+    $('login').classList.add('hidden');$('app').classList.remove('hidden');
+    $('currentUser').textContent=(current.user||u)+' · '+roleLabel(current.role);
+    document.querySelectorAll('.admin-only,.privileged-only').forEach(e=>e.classList.toggle('hidden',!canAll()));
+    try{await loadDB();applySettings();refresh()}
+    catch(dbErr){
+      console.error('Erro ao carregar dados do sistema:',dbErr);
+      $('loginError').textContent='Login realizado, mas há um problema no banco: '+(dbErr?.message||dbErr);
+      applySettings();
+    }
+  }catch(e){
+    console.error(e);
+    $('loginError').textContent=e?.message||'Falha no login.';
+  }
+}
+async function logout(){
+  current=null;
+  localStorage.removeItem('svendas_profile_id');
+  db={settings:{name:'Sistema de Vendas',logo:''},users:[],sellers:[],pdvs:[],operators:[],plans:[],attendanceConfig:{reasons:[],statuses:[]},sales:[],attendances:[],helpLinks:[],individualProducts:[],individualSales:[]};
+  $('app').classList.add('hidden');$('login').classList.remove('hidden');$('loginPass').value='';$('loginError').textContent='';
+}
+function applySettings(){$('brandName').textContent=db.settings.name;$('loginTitle').textContent=db.settings.name;for(const id of ['brandLogo','loginLogo']){const e=$(id);if(db.settings.logo){e.src=db.settings.logo;e.classList.remove('hidden')}else e.classList.add('hidden')}}
+function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));btn?.classList.add('active');refresh()}
+function refresh(){if(!current)return;applySettings();renderDashboardFilters();renderDashboard();renderSales();renderAttendances();renderReports();renderHelpLinks();renderIndividualSales();fillIndividualPdvFilter();fillFilters();fillAttendancePdvFilter();renderAttStatusFilter()}
+
+function fillAttendancePdvFilter(){const sel=$('attPDV');if(!sel)return;const old=sel.value;const vals=[...new Set(visibleAtt().map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name).filter(Boolean))].sort();sel.innerHTML='<option value="">PDV</option>'+vals.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');sel.value=old}
+
+function renderAttStatusFilter(){
+  const sel = $('attStatus');
+  if(!sel) return;
+  const old = sel.value;
+  sel.innerHTML = '<option value="">Todos os status</option>' + db.attendanceConfig.statuses.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  sel.value = old;
+}
+
+function fillFilters(){
+  const opts=(id,arr,fn)=>{const e=$(id),old=e.value,ph=e.options?.[0]?.textContent||'';e.innerHTML='<option value="">'+ph+'</option>';[...new Set(arr.map(fn))].filter(Boolean).sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;e.appendChild(o)});e.value=old};
+  opts('fVendedor',visibleSales(),x=>db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name);opts('fPDV',visibleSales(),x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name);opts('fPlano',visibleSales(),x=>x.planName);opts('fOperadora',visibleSales(),x=>x.operatorName);
+  const years=[...new Set(visibleSales().map(x=>x.date?.slice(0,4)).filter(Boolean))];const ay=$('fAno'),old=ay.value;ay.innerHTML='<option value="">Ano</option>';years.sort().forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;ay.appendChild(o)});ay.value=old;
+  const m=$('fMes'),mo=m.value;m.innerHTML='<option value="">Mês</option>';for(let i=1;i<=12;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.textContent=new Date(2000,i-1,1).toLocaleString('pt-BR',{month:'long'});m.appendChild(o)}m.value=mo;
+}
+function dashboardSales(){let a=visibleSales();const fd=$('dData')?.value||'',mes=$('dMes')?.value||'',ano=$('dAno')?.value||'',vend=$('dVendedor')?.value||'',pdv=$('dPDV')?.value||'',op=$('dOperadora')?.value||'',plano=$('dPlano')?.value||'';return a.filter(x=>(!fd||x.date===fd)&&(!mes||x.date?.slice(5,7)===mes)&&(!ano||x.date?.slice(0,4)===ano)&&(!vend||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===vend)&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv)&&(!op||x.operatorName===op)&&(!plano||x.planName===plano))}
+function renderDashboardFilters(){const a=visibleSales(),opts=(id,vals,ph)=>{const e=$(id),old=e.value;e.innerHTML=`<option value="">${ph}</option>`;[...new Set(vals.filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;e.appendChild(o)});e.value=old};opts('dVendedor',a.map(x=>db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name),'Vendedor');opts('dPDV',a.map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name),'PDV');opts('dOperadora',a.map(x=>x.operatorName),'Operadora');opts('dPlano',a.map(x=>x.planName),'Plano');const ay=$('dAno'),oy=ay.value;ay.innerHTML='<option value="">Ano</option>';[...new Set(a.map(x=>x.date?.slice(0,4)).filter(Boolean))].sort().forEach(y=>{const o=document.createElement('option');o.value=y;o.textContent=y;ay.appendChild(o)});ay.value=oy;const m=$('dMes'),om=m.value;m.innerHTML='<option value="">Mês</option>';for(let i=1;i<=12;i++){const o=document.createElement('option');o.value=String(i).padStart(2,'0');o.textContent=new Date(2000,i-1,1).toLocaleString('pt-BR',{month:'long'});m.appendChild(o)}m.value=om}
+function clearDashboardFilters(){['dData','dMes','dAno','dVendedor','dPDV','dOperadora','dPlano'].forEach(id=>$(id).value='');renderDashboard()}
+function selectedDashboardPeriod(){const now=new Date(),ano=Number($('dAno')?.value||now.getFullYear()),mes=Number($('dMes')?.value||String(now.getMonth()+1).padStart(2,'0'));return {ano,mes}}
+function dashboardScope(){let a=visibleSales();const vend=$('dVendedor')?.value||'',pdv=$('dPDV')?.value||'',op=$('dOperadora')?.value||'',plano=$('dPlano')?.value||'';return a.filter(x=>(!vend||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===vend)&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv)&&(!op||x.operatorName===op)&&(!plano||x.planName===plano))}
+function commissionForSale(x){return Number(x.commission||0)}
+function dashboardCommission(){const a=dashboardScope(),p=selectedDashboardPeriod();return a.filter(x=>x.status==='Instalado'&&x.installDate&&Number(x.installDate.slice(0,4))===p.ano&&Number(x.installDate.slice(5,7))===p.mes)}
+function carriedOverInstalled(){const a=dashboardScope(),p=selectedDashboardPeriod();let prevYear=p.ano,prevMonth=p.mes-1;if(prevMonth===0){prevMonth=12;prevYear--}return a.filter(x=>x.status==='Instalado'&&x.date&&x.installDate&&Number(x.date.slice(0,4))===prevYear&&Number(x.date.slice(5,7))===prevMonth&&Number(x.installDate.slice(0,4))===p.ano&&Number(x.installDate.slice(5,7))===p.mes).length}
+function renderDashboard(){
+  const a=dashboardSales();
+  $('mVendas').textContent=a.length;
+  $('mInstaladas').textContent=a.filter(x=>x.status==='Instalado').length;
+  $('mPendentes').textContent=a.filter(x=>['Pendente','Pendente BKO'].includes(x.status)).length;
+  $('mCanceladas').textContent=a.filter(x=>x.status==='Cancelado').length;
+  $('mValor').textContent=money(a.reduce((s,x)=>s+Number(x.value||0),0));
+  const ci=dashboardCommission();
+  $('mComissao').textContent=money(ci.reduce((s,x)=>s+commissionForSale(x),0));
+  $('mCarried').textContent=carriedOverInstalled();
+  let alerts='';
+  const now=new Date();
+  now.setHours(0,0,0,0);
+  a.forEach(x=>{
+    if(!x.installDate)return;
+    const d=new Date(x.installDate+'T00:00:00'),diff=Math.round((d-now)/86400000);
+    if(diff===1&&x.status!=='Instalado'&&x.status!=='Cancelado')alerts+=`<div class="alert warning">⚠️ Instalação de <b>${esc(x.name)}</b> prevista para amanhã (${fmtDate(x.installDate)}).</div>`;
+    if(diff<0&&x.status==='Vendido')alerts+=`<div class="alert danger">🚨 BKO: venda de <b>${esc(x.name)}</b> passou da data prevista de instalação sem atualização de status.</div>`
+  });
+  $('alerts').innerHTML=alerts||'<div class="alert success">✓ Nenhum alerta pendente.</div>';
+  
+  const recent=[...a].sort((x,y)=>(y.createdAt||'').localeCompare(x.createdAt||'')).slice(0,8);
+  $('recentSales').innerHTML=recent.length ? `<div class="table-wrap"><table class="table"><thead><tr><th>Data</th><th>Cliente</th><th>Plano</th><th>Valor</th><th>Status</th><th>Vendedor</th><th>PDV</th></tr></thead><tbody>${recent.map(x=>`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Nenhuma venda cadastrada.</p>';
+}
+function renderSales(){let a=visibleSales(),fd=$('fData').value,mes=$('fMes').value,ano=$('fAno').value,st=$('fStatus').value,v=$('fVendedor').value,p=$('fPDV').value,c=$('fContractId')?.value.trim()||'',ln=$('fLineNumber')?.value.trim()||'',pl=$('fPlano').value,op=$('fOperadora').value;a=a.filter(x=>(!fd||x.date===fd)&&(!mes||x.date?.slice(5,7)===mes)&&(!ano||x.date?.slice(0,4)===ano)&&(!st||x.status===st)&&(!v||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===v)&&(!p||db.pdvs.find(q=>Number(q.id)===Number(x.pdvId))?.name===p)&&(!c||String(x.contractId||'').toLowerCase().includes(c.toLowerCase()))&&(!ln||String(x.lineNumber||'').toLowerCase().includes(ln.toLowerCase()))&&(!pl||x.planName===pl)&&(!op||x.operatorName===op));$('salesBody').innerHTML=a.map(x=>`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.operatorName)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td class="actions">${canEditSale(x)?`<button class="btn btn-secondary" onclick="openSale(${x.id})">Editar</button>`:''}${canDeleteSale(x)?`<button class="btn btn-danger" onclick="deleteSale(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum registro encontrado.</td></tr>'}
+function canEditSale(x){if(isAdmin())return true;if(current.role==='bko'||isSupervisor())return Number(x.pdvId)===Number(seller()?.pdvId);return Number(x.sellerId)===Number(current.sellerId)}
+function canDeleteSale(){return isAdmin()}
+
+function openSale(id){
+  if(id){const x=db.sales.find(x=>Number(x.id)===Number(id));if(!x||!canEditSale(x))return alert('Sem permissão.')}
+  const x=id?db.sales.find(x=>Number(x.id)===Number(id)):null;
+  const ops=db.operators.map(o=>`<option value="${o.id}" ${Number(x?.operatorId)===Number(o.id)?'selected':''}>${esc(o.name)}</option>`).join('');
+  
+  const currentSellerId = x?.sellerId || (current.role === 'usuario' ? current.sellerId : db.sellers[0]?.id || '');
+  const currentPdvId = x?.pdvId || (current.role === 'usuario' ? seller()?.pdvId : db.pdvs[0]?.id || '');
+
+  const isCnpj = docDigits(x?.cpf).length > 11;
+
+  $('modalTitle').textContent=x?'Editar venda':'Cadastrar venda';
+  $('modalBody').innerHTML=`<div class="grid">
+  <div class="form-group"><label>Nome *</label><input id="sName" value="${esc(x?.name||'')}"></div>
+  <div class="form-group"><label>Telefone(s)</label><input id="sPhone" value="${esc((x?.phones||[]).join(', '))}" placeholder="Separe por vírgula"></div>
+  <div class="form-group"><label>E-mail(s)</label><input id="sEmail" value="${esc((x?.emails||[]).join(', '))}" placeholder="Separe por vírgula"></div>
+  <div class="form-group">
+    <label>Documento *</label>
+    <div class="doc-group">
+      <select id="sDocType" class="doc-type-select" onchange="onDocTypeChange('sDocType','sCpf')">
+        <option value="CPF" ${!isCnpj?'selected':''}>CPF</option>
+        <option value="CNPJ" ${isCnpj?'selected':''}>CNPJ</option>
+      </select>
+      <input id="sCpf" value="${esc(x?.cpf||'')}">
+    </div>
+  </div>
+  <div class="form-group"><label>Data nascimento</label><input id="sBirth" type="date" value="${esc(x?.birthDate||'')}"></div>
+  <div class="form-group"><label>Nome da mãe</label><input id="sMother" value="${esc(x?.motherName||'')}"></div>
+  <div class="form-group">
+    <label>CEP *</label>
+    <div class="input-with-btn">
+      <input id="sCep" value="${esc(x?.cep||'')}" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCep('sCep','sRua','sBairro','sCity','sUf')}">
+      <button type="button" class="btn-search-cep" title="Buscar endereço pelo CEP" onclick="searchCep('sCep','sRua','sBairro','sCity','sUf')">🔍</button>
+    </div>
+  </div>
+  <div class="form-group"><label>Rua *</label><input id="sRua" value="${esc(x?.street||'')}"></div>
+  <div class="form-group"><label>Número *</label><input id="sNum" value="${esc(x?.number||'')}"></div>
+  <div class="form-group"><label>Complemento</label><input id="sComp" value="${esc(x?.complement||'')}"></div>
+  <div class="form-group"><label>Bairro *</label><input id="sBairro" value="${esc(x?.district||'')}"></div>
+  <div class="form-group"><label>Cidade *</label><input id="sCity" value="${esc(x?.city||'')}"></div>
+  <div class="form-group"><label>Estado *</label><input id="sUf" maxlength="2" value="${esc(x?.uf||'')}"></div>
+  <div class="form-group"><label>Endereço de instalação diferente do cadastro?</label><select id="sDiffInstall" onchange="toggleSaleInstallAddress()"><option value="false">Não</option><option value="true">Sim</option></select></div>
+  <div id="saleInstallAddressBox" class="form-group full hidden"><div class="card" style="margin-top:0"><h4 style="margin:0 0 8px">Endereço de instalação</h4><div class="grid">
+   <div class="form-group">
+     <label>CEP *</label>
+     <div class="input-with-btn">
+       <input id="iCep" value="${esc(x?.installAddress?.cep||'')}" onkeydown="if(event.key==='Enter'){event.preventDefault();searchCep('iCep','iRua','iBairro','iCity','iUf')}">
+       <button type="button" class="btn-search-cep" title="Buscar endereço pelo CEP" onclick="searchCep('iCep','iRua','iBairro','iCity','iUf')">🔍</button>
+     </div>
+   </div>
+   <div class="form-group"><label>Rua *</label><input id="iRua" value="${esc(x?.installAddress?.street||'')}"></div>
+   <div class="form-group"><label>Número *</label><input id="iNum" value="${esc(x?.installAddress?.number||'')}"></div><div class="form-group"><label>Complemento</label><input id="iComp" value="${esc(x?.installAddress?.complement||'')}"></div>
+   <div class="form-group"><label>Bairro *</label><input id="iBairro" value="${esc(x?.installAddress?.district||'')}"></div><div class="form-group"><label>Cidade *</label><input id="iCity" value="${esc(x?.installAddress?.city||'')}"></div>
+   <div class="form-group"><label>Estado *</label><input id="iUf" maxlength="2" value="${esc(x?.installAddress?.uf||'')}"></div></div></div></div>
+  <div class="form-group"><label>Operadora vendida *</label><select id="sOp" onchange="updatePlans()"><option value="">Selecione</option>${ops}</select></div>
+  <div class="form-group"><label>Plano vendido *</label><select id="sPlan"></select></div><div class="form-group"><label>Valor</label><input id="sValue" readonly></div><div class="form-group"><label>Comissão do produto</label><input id="sCommission" readonly></div>
+  <div class="form-group"><label>Data da venda</label><input id="sDate" type="date" value="${x?.date||today()}" ${x?'readonly':''}></div><div class="form-group"><label>Data prevista de instalação</label><input id="sInstall" type="date" value="${x?.installDate||''}"></div>
+  <div class="form-group"><label>Status</label><select id="sStatus" ${(!x||current.role==='usuario')?'disabled':''}><option>Vendido</option><option>Instalado</option><option>Pendente</option><option>Pendente BKO</option><option>Cancelado</option></select></div>
+  <div class="form-group"><label>ID contrato</label><input id="sContractId" value="${esc(x?.contractId||'')}"></div>
+  <div class="form-group"><label>Número da linha</label><input id="sLineNumber" value="${esc(x?.lineNumber||'')}"></div>
+  <div class="form-group"><label>Vendedor</label><select id="sSeller" ${current.role==='usuario'?'disabled':''}>${db.sellers.map(s=>`<option value="${s.id}" ${Number(currentSellerId)===Number(s.id)?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div>
+  <div class="form-group"><label>PDV</label><select id="sPdv" ${current.role==='usuario'?'disabled':''}>${db.pdvs.map(p=>`<option value="${p.id}" ${Number(currentPdvId)===Number(p.id)?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
+  <div class="form-group full"><label>Observação</label><textarea id="sObs">${esc(x?.obs||'')}</textarea></div></div>
+  <div style="text-align:right;margin-top:15px"><button class="btn btn-primary" onclick="saveSale(${id||0})">Salvar venda</button></div>`;
+  $('sStatus').value=x?.status||'Vendido';$('sDiffInstall').value=String(!!x?.differentInstallAddress);toggleSaleInstallAddress();updatePlans(x?.planId);setupCPFField($('sCpf'), 'sDocType');$('modal').classList.remove('hidden');
+}
+function toggleSaleInstallAddress(){$('saleInstallAddressBox')?.classList.toggle('hidden',$('sDiffInstall')?.value!=='true')}
+function updatePlans(selected){const opId=Number($('sOp').value),plans=db.plans.filter(p=>Number(p.operatorId)===opId),sel=$('sPlan');sel.innerHTML='<option value="">Selecione</option>'+plans.map(p=>`<option value="${p.id}" ${Number(selected)===Number(p.id)?'selected':''}>${esc(p.name)}</option>`).join('');if(plans.length&&!selected)sel.value=plans[0].id;updateValue()}
+function updateValue(){const pl=db.plans.find(p=>Number(p.id)===Number($('sPlan')?.value));if($('sValue'))$('sValue').value=money(pl?.value||0);if($('sCommission'))$('sCommission').value=money(pl?.commission||0)}
+document.addEventListener('change',e=>{if(e.target.id==='sPlan'||e.target.id==='sOp')updateValue()});
+document.addEventListener('focusin',e=>{if(/cpf/i.test(e.target.id||''))setupCPFField(e.target, $('sDocType') ? 'sDocType' : null)});
+
+async function saveSale(id){
+ try{
+  const old=id?db.sales.find(x=>Number(x.id)===Number(id)):null;
+  if(id&&!canEditSale(old))return alert('Sem permissão.');
+  if(!id&&!$('sName').value.trim())return alert('Informe o nome.');
+  const op=db.operators.find(o=>Number(o.id)===Number($('sOp').value)),pl=db.plans.find(p=>Number(p.id)===Number($('sPlan').value));if(!op||!pl)return alert('Selecione operadora e plano.');
+  if(!validateCPFField('sCpf', true, 'sDocType')) return;
+  const required=[['CEP',$('sCep').value],['Rua',$('sRua').value],['Número',$('sNum').value],['Bairro',$('sBairro').value],['Cidade',$('sCity').value],['Estado',$('sUf').value],['Nome',$('sName').value]];const missing=required.find(([,v])=>!String(v||'').trim());if(missing)return alert('Informe o campo: '+missing[0]+'.');
+  const differentInstallAddress=$('sDiffInstall').value==='true';if(differentInstallAddress){const req=[['CEP',$('iCep').value],['Rua',$('iRua').value],['Número',$('iNum').value],['Bairro',$('iBairro').value],['Cidade',$('iCity').value],['Estado',$('iUf').value]];const miss=req.find(([,v])=>!String(v||'').trim());if(miss)return alert('Informe o campo do endereço de instalação: '+miss[0]+'.')}
+  
+  const sellerId = current.role === 'usuario' ? Number(current.sellerId) : (Number($('sSeller').value) || db.sellers[0]?.id);
+  const pdvId = current.role === 'usuario' ? Number(seller()?.pdvId) : (Number($('sPdv').value) || db.pdvs[0]?.id);
+
+  if(!sellerId) return alert('Selecione um vendedor válido cadastrado no sistema.');
+
+  const payload={name:$('sName').value.trim(),cpf:$('sCpf').value,birth_date:$('sBirth').value||null,mother_name:$('sMother').value.trim(),id_contrato:$('sContractId').value.trim(),numero_linha:$('sLineNumber').value.trim(),street:$('sRua').value,number:$('sNum').value,complement:$('sComp').value,district:$('sBairro').value,city:$('sCity').value,cep:$('sCep').value,uf:$('sUf').value.toUpperCase(),phones:$('sPhone').value.split(',').map(x=>x.trim()).filter(Boolean),emails:$('sEmail').value.split(',').map(x=>x.trim()).filter(Boolean),different_install_address:differentInstallAddress,install_cep:differentInstallAddress?$('iCep').value:null,install_street:differentInstallAddress?$('iRua').value:null,install_number:differentInstallAddress?$('iNum').value:null,install_complement:differentInstallAddress?$('iComp').value:null,install_district:differentInstallAddress?$('iBairro').value:null,install_city:differentInstallAddress?$('iCity').value:null,install_uf:differentInstallAddress?$('iUf').value.toUpperCase():null,operator_id:op.id,operator_name:op.name,plan_id:pl.id,plan_name:pl.name,value:Number(pl.value||0),commission:Number(pl.commission||0),sale_date:$('sDate').value||today(),install_date:$('sInstall').value||null,status:$('sStatus').value,seller_id:sellerId,pdv_id:pdvId,observation:$('sObs').value};
+  const q=id?sb.from('sales').update(payload).eq('id',id).select().single():sb.from('sales').insert(payload).select().single();const {error}=await q;if(error)throw error;closeModal();await loadDB();refresh();
+ }catch(e){fail(e)}
+}
+async function deleteSale(id){if(!isAdmin())return alert('Somente o admin pode excluir vendas.');if(confirm('Excluir esta venda?')){const {error}=await sb.from('sales').delete().eq('id',id);if(error)return fail(error);await loadDB();refresh()}}
+
+function openAttendance(id){const x=id?db.attendances.find(a=>Number(a.id)===Number(id)):null;if(x&&!canEditAtt(x))return alert('Sem permissão.');$('modalTitle').textContent=x?'Editar atendimento':'Novo atendimento';
+const isCnpj = docDigits(x?.cpf).length > 11;
+$('modalBody').innerHTML=`<div class="grid"><div class="form-group"><label>Nome do cliente *</label><input id="aName" value="${esc(x?.name||'')}"></div>
+<div class="form-group">
+  <label>Documento</label>
+  <div class="doc-group">
+    <select id="aDocType" class="doc-type-select" onchange="onDocTypeChange('aDocType','aCpf')">
+      <option value="CPF" ${!isCnpj?'selected':''}>CPF</option>
+      <option value="CNPJ" ${isCnpj?'selected':''}>CNPJ</option>
+    </select>
+    <input id="aCpf" value="${esc(x?.cpf||'')}">
+  </div>
+</div>
+<div class="form-group"><label>Telefone</label><input id="aPhone" value="${esc(x?.phone||'')}"></div><div class="form-group"><label>Motivo</label><select id="aReason">${db.attendanceConfig.reasons.map(r=>`<option ${x?.reason===r?'selected':''}>${esc(r)}</option>`).join('')}</select></div><div class="form-group"><label>Status</label><select id="aStatus">${db.attendanceConfig.statuses.map(r=>`<option ${x?.status===r?'selected':''}>${esc(r)}</option>`).join('')}</select></div><div class="form-group full"><label>Observação</label><textarea id="aObs">${esc(x?.obs||'')}</textarea></div></div><div style="text-align:right"><button class="btn btn-primary" onclick="saveAttendance(${id||0})">Salvar</button></div>`;setupCPFField($('aCpf'),'aDocType');$('modal').classList.remove('hidden')}
+async function saveAttendance(id){try{const old=id?db.attendances.find(x=>Number(x.id)===Number(id)):null;if(old&&!canEditAtt(old))return alert('Sem permissão.');if(!id&&!$('aName').value.trim())return alert('Informe o nome.');if($('aCpf').value.trim() && !validateCPFField('aCpf', false, 'aDocType')) return;const payload={name:$('aName').value.trim(),cpf:$('aCpf').value,phone:$('aPhone').value,reason:$('aReason').value,status:$('aStatus').value,observation:$('aObs').value,seller_id:old?.sellerId||current.sellerId,pdv_id:old?.pdvId||seller()?.pdvId};const q=id?sb.from('attendances').update(payload).eq('id',id).select().single():sb.from('attendances').insert(payload).select().single();const {error}=await q;if(error)throw error;closeModal();await loadDB();refresh()}catch(e){fail(e)}}
+function canEditAtt(x){return isAdmin()||(isSupervisor()||current.role==='bko')&&Number(x.pdvId)===Number(seller()?.pdvId)||Number(x.sellerId)===Number(current.sellerId)}
+function renderAttendances(){let a=visibleAtt(),q=($('searchProtocol').value||'').toLowerCase(),st=$('attStatus').value,pdv=$('attPDV')?.value||'';a=a.filter(x=>(!q||[x.protocol,x.name,x.cpf].join(' ').toLowerCase().includes(q))&&(!st||x.status===st)&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv));$('attBody').innerHTML=a.map(x=>`<tr><td>${esc(x.protocol)}</td><td>${new Date(x.date).toLocaleString('pt-BR')}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.phone)}</td><td>${esc(x.reason)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td class="actions">${canEditAtt(x)?`<button class="btn btn-secondary" onclick="openAttendance(${x.id})">Editar</button>`:''}${isAdmin()?`<button class="btn btn-danger" onclick="deleteAtt(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum atendimento encontrado.</td></tr>'}
+async function deleteAtt(id){if(!isAdmin())return alert('Somente o admin pode excluir atendimentos.');if(confirm('Excluir atendimento?')){const {error}=await sb.from('attendances').delete().eq('id',id);if(error)return fail(error);await loadDB();refresh()}}
+function openReopen(){$('modalTitle').textContent='Reabrir atendimento';$('modalBody').innerHTML='<div class="form-group"><label>Protocolo</label><input id="rProtocol"></div><div class="form-group"><label>Senha</label><input id="rPass" type="password"></div><button class="btn btn-primary" onclick="reopen()">Buscar e reabrir</button>';$('modal').classList.remove('hidden')}
+async function reopen(){try{const protocol=$('rProtocol').value.trim();const {data,error}=await sb.from('attendances').select('*').eq('protocol',protocol).maybeSingle();if(error)throw error;if(!data)return alert('Protocolo não encontrado.');return alert('A validação da senha de reabertura deve ser configurada como RPC/Edge Function no Supabase antes de habilitar esta operação.')}catch(e){fail(e)}}
+
+function reportSalesFiltered(){let a=visibleSales();const fd=$('rData')?.value||'',mes=$('rMes')?.value||'',ano=$('rAno')?.value||'',v=$('rVendedor')?.value||'',p=$('rPDV')?.value||'',op=$('rOperadora')?.value||'',pl=$('rPlano')?.value||'',st=$('rStatus')?.value||'';return a.filter(x=>(!fd||x.date===fd)&&(!mes||x.date?.slice(5,7)===mes)&&(!ano||x.date?.slice(0,4)===ano)&&(!v||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===v)&&(!p||db.pdvs.find(q=>Number(q.id)===Number(x.pdvId))?.name===p)&&(!op||x.operatorName===op)&&(!pl||x.planName===pl)&&(!st||x.status===st))}
+function renderReportFilters(){const a=visibleSales(),fill=(id,vals,label)=>{const e=$(id),old=e.value;e.innerHTML=`<option value="">${label}</option>`;[...new Set(vals.filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;e.appendChild(o)});e.value=old};fill('rVendedor',a.map(x=>db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name),'Vendedor');fill('rPDV',a.map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name),'PDV');fill('rOperadora',a.map(x=>x.operatorName),'Operadora');fill('rPlano',a.map(x=>x.planName),'Plano');const y=$('rAno'),oy=y.value,ys=[...new Set(a.map(x=>x.date?.slice(0,4)).filter(Boolean))].sort();y.innerHTML='<option value="">Ano</option>';ys.forEach(v=>y.innerHTML+=`<option value="${v}">${v}</option>`);y.value=oy;const m=$('rMes'),om=m.value;m.innerHTML='<option value="">Mês</option>';for(let i=1;i<=12;i++){const n=String(i).padStart(2,'0');m.innerHTML+=`<option value="${n}">${new Date(2000,i-1,1).toLocaleString('pt-BR',{month:'long'})}</option>`}m.value=om}
+function renderReports(){renderReportFilters();const a=reportSalesFiltered();$('rVendas').textContent=a.length;$('rValor').textContent=money(a.reduce((s,x)=>s+Number(x.value||0),0));$('reportSalesBody').innerHTML=a.map(x=>{const sellerName=db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-',pdv=db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-',addr=[x.street,x.number,x.complement,x.district,x.city,x.uf,x.cep].filter(Boolean).join(', ');return `<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc((x.phones||[]).join(', '))}</td><td>${esc(x.operatorName)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${money(commissionForSale(x))}</td><td>${fmtDate(x.installDate)}</td><td>${badge(x.status)}</td><td>${esc(sellerName)}</td><td>${esc(pdv)}</td><td>${esc(addr)}</td><td>${esc(x.obs||'')}</td></tr>`}).join('')||'<tr><td colspan="14">Nenhuma venda encontrada.</td></tr>';const at=visibleAtt();$('reportAttBody').innerHTML=at.map(x=>`<tr><td>${esc(x.protocol)}</td><td>${new Date(x.date).toLocaleString('pt-BR')}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.phone)}</td><td>${esc(x.reason)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td>${esc(x.obs||'')}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum atendimento encontrado.</td></tr>'}
+function clearReportFilters(){['rData','rMes','rAno','rVendedor','rPDV','rOperadora','rPlano','rStatus'].forEach(id=>$(id).value='');renderReports()}
+function exportCSV(type){if(!canAll())return alert('Apenas admin e supervisor podem exportar.');const rows=type==='sales'?reportSalesFiltered().map(x=>({Data:x.date,Cliente:x.name,"CPF/CNPJ":x.cpf,Telefone:(x.phones||[]).join(', '),Email:(x.emails||[]).join(', '),Rua:x.street,Número:x.number,Complemento:x.complement,Bairro:x.district,Cidade:x.city,UF:x.uf,CEP:x.cep,Operadora:x.operatorName,Plano:x.planName,Valor:x.value,Comissão:commissionForSale(x),Instalação:x.installDate,Status:x.status,Vendedor:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name,PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name,Observação:x.obs})):visibleAtt().map(x=>({Protocolo:x.protocol,DataHora:x.date,Cliente:x.name,"CPF/CNPJ":x.cpf,Telefone:x.phone,Motivo:x.reason,Status:x.status,Vendedor:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name,PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name,Observação:x.obs}));if(!rows.length)return alert('Não há registros para exportar.');const keys=Object.keys(rows[0]),csv='\ufeff'+[keys.join(';'),...rows.map(r=>keys.map(k=>`"${String(r[k]??'').replaceAll('"','""')}"`).join(';'))].join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=type+'_'+today()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+
+function renderHelpLinks(){
+  const tbody = $('helpLinksBody');
+  if(!tbody) return;
+  tbody.innerHTML = db.helpLinks.map(x=>`<tr><td><b>${esc(x.title)}</b></td><td><a href="${esc(x.url)}" target="_blank" style="color:var(--primary);text-decoration:underline">${esc(x.url)}</a></td></tr>`).join('') || '<tr><td colspan="2">Nenhum link cadastrado.</td></tr>';
+}
+
+function manage(type){
+  if(!canAll())return alert('Somente ADMIN ou SUPERVISOR podem acessar a configuração.');
+  if(type==='system')return systemModal();
+  if(type==='users')return usersModal();
+  if(type==='sellers')return sellersModal();
+  if(type==='pdvs')return pdvModal();
+  if(type==='operators')return operatorModal();
+  if(type==='attendanceConfig')return attendanceConfigModal();
+  if(type==='helpLinks')return manageHelpLinksModal();
+  if(type==='individualProducts')return individualProductsModal();
+}
+
+function systemModal(){$('modalTitle').textContent='Configuração do sistema';$('modalBody').innerHTML=`<div class="form-group"><label>Nome do sistema</label><input id="sysName" value="${esc(db.settings.name)}"></div><div class="form-group"><label>Senha de configuração</label><p class="muted">A senha de configuração não é mais armazenada no navegador. Controle o acesso pela role admin do Supabase.</p></div><div class="form-group"><label>Senha para reabrir atendimento</label><p class="muted">A validação deve ser feita no servidor por RPC/Edge Function.</p></div><div class="form-group"><label>Logo grande</label><input id="logoFile" type="file" accept="image/*" onchange="previewLogo(this)"><div><img id="logoPrev" class="logo-preview ${db.settings.logo?'':'hidden'}" src="${esc(db.settings.logo)}"></div></div><button class="btn btn-primary" onclick="saveSystem()">Salvar</button>`;$('modal').classList.remove('hidden')}
+function previewLogo(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('logoPrev').src=r.result;$('logoPrev').classList.remove('hidden');$('logoPrev').dataset.data=r.result};r.readAsDataURL(f)}
+async function saveSystem(){try{const patch={name:$('sysName').value||'Sistema de Vendas',logo_url:$('logoPrev').dataset.data||$('logoPrev').src||null,updated_at:new Date().toISOString()};const id=(await sb.from('app_settings').select('id').limit(1).single()).data?.id;if(!id)throw new Error('Configuração app_settings não encontrada. Execute o SQL primeiro.');const {error}=await sb.from('app_settings').update(patch).eq('id',id);if(error)throw error;closeModal();await loadDB();refresh()}catch(e){fail(e)}}
+
+function listManager(title,type,headers,row,extra=''){
+  const arr = type==='operators'?db.operators:type==='users'?db.users:type==='helpLinks'?db.helpLinks:db[type]||[];
+  const editFn = `edit${type==='users'?'User':type==='sellers'?'Seller':type==='pdvs'?'Pdv':type==='helpLinks'?'HelpLink':type==='individualProducts'?'IndividualProduct':'Operator'}`;
+  $('modalTitle').textContent=title;
+  $('modalBody').innerHTML=`<div style="margin-bottom:12px">${extra}</div><div class="table-wrap"><table class="table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}<th>Ações</th></tr></thead><tbody>${arr.map(x=>{const arg=JSON.stringify(String(x.id));return `<tr>${row(x).map(v=>`<td>${v}</td>`).join('')}<td><button class="btn btn-secondary" onclick='${editFn}(${arg})'>Editar</button><button class="btn btn-danger" onclick='delManager(${JSON.stringify(type)},${arg})'>Excluir</button></td></tr>`}).join('')}</tbody></table></div>`;
+  $('modal').classList.remove('hidden');
+}
+
+function usersModal(){listManager('Usuários','users',['Usuário','Perfil','Vendedor','Ativo'],x=>[esc(x.user),roleLabel(x.role),esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-'),x.active?'Sim':'Não'],'<button class="btn btn-primary" onclick="editUser()">+ Adicionar</button>')}
+
+async function editUser(id){
+  const x=id?db.users.find(x=>String(x.id)===String(id))||{}:{};
+  $('modalTitle').textContent=id?'Editar usuário':'Novo usuário';
+  $('modalBody').innerHTML=`<div class="form-group"><label>Usuário *</label><input id="uName" value="${esc(x.user||'')}"></div>
+  <div class="form-group"><label>Senha ${id?'(deixe vazio para não alterar)':'*'}</label><input id="uPass" type="password"></div>
+  <div class="form-group"><label>Perfil</label><select id="uRole"><option value="usuario">Usuário</option><option value="bko">BKO</option><option value="supervisor">Supervisor</option><option value="admin">Admin</option></select></div>
+  <div class="form-group"><label>Vendedor vinculado *</label><select id="uSeller"><option value="">Nenhum</option>${db.sellers.map(s=>`<option value="${s.id}" ${Number(x.sellerId)===Number(s.id)?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div>
+  <div class="form-group"><label>Ativo</label><select id="uActive"><option value="true">Sim</option><option value="false">Não</option></select></div>
+  <button class="btn btn-primary" onclick="saveUser('${id||''}')">Salvar</button>`;
+  $('uRole').value=x.role||'usuario';
+  $('uActive').value=String(x.active!==false);
+  $('modal').classList.remove('hidden');
+}
+
+async function saveUser(id){
+  try {
+    const user = $('uName').value.trim().toUpperCase();
+    const pass = $('uPass').value;
+    const role = $('uRole').value;
+    const sellerId = Number($('uSeller').value) || null;
+    const active = $('uActive').value === 'true';
+
+    if (!user || (!id && !pass)) return alert('Preencha usuário e senha.');
+    if (!sellerId) return alert('Selecione um Vendedor vinculado.');
+
+    const duplicate = await sb.from('profiles').select('id').ilike('username', user).neq('id', id || '00000000-0000-0000-0000-000000000000').maybeSingle();
+    if (duplicate.error) throw duplicate.error;
+    if (duplicate.data) return alert('Este usuário já existe.');
+
+    if (id) {
+      const patch = { username: user, role, seller_id: sellerId, active };
+      if (pass) patch.password = pass;
+      const { error } = await sb.from('profiles').update(patch).eq('id', id);
+      if (error) throw error;
+      if (current && String(current.id) === String(id)) current = { ...current, ...patch, sellerId: sellerId, user: user };
+    } else {
+      const { data, error } = await sb.from('profiles').insert({ username: user, password: pass, role, seller_id: sellerId, active }).select().single();
+      if (error) throw error;
+    }
+
+    closeModal();
+    await loadDB();
+    usersModal();
+    alert(id ? 'Usuário atualizado com sucesso.' : 'Usuário criado com sucesso.');
+  } catch (e) {
+    fail(e, 'Falha ao salvar usuário');
+  }
+}
+
+function sellersModal(){listManager('Vendedores','sellers',['Nome','Telefone','PDV','Permissão'],x=>[esc(x.name),esc(x.phone),esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-'),esc(x.permission)],'<button class="btn btn-primary" onclick="editSeller()">+ Adicionar</button>')}
+async function editSeller(id){const x=id?db.sellers.find(x=>Number(x.id)===Number(id))||{}:{};$('modalTitle').textContent='Vendedor';$('modalBody').innerHTML=`<div class="form-group"><label>Nome</label><input id="vName" value="${esc(x.name||'')}"></div><div class="form-group"><label>Telefone</label><input id="vPhone" value="${esc(x.phone||'')}"></div><div class="form-group"><label>PDV</label><select id="vPdv">${db.pdvs.map(p=>`<option value="${p.id}" ${Number(x.pdvId)===Number(p.id)?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div><div class="form-group"><label>Permissão</label><select id="vPerm"><option>visualizar tudo do pdv</option><option>visualizar so o seus lançamentos</option><option>visualizar todos os pdv tudo</option></select></div><button class="btn btn-primary" onclick="saveSeller(${id||0})">Salvar</button>`;$('vPerm').value=x.permission||'visualizar so o seus lançamentos';$('modal').classList.remove('hidden')}
+async function saveSeller(id){try{const d={name:$('vName').value.trim().toUpperCase(),phone:$('vPhone').value,pdv_id:Number($('vPdv').value)||null,permission:$('vPerm').value};if(!d.name)return alert('INFORME O NOME DO VENDEDOR.');const q=id?sb.from('sellers').update(d).eq('id',id):sb.from('sellers').insert(d);const {error}=await q;if(error)throw error;await loadDB();sellersModal()}catch(e){fail(e)}}
+
+function pdvModal(){listManager('PDVs','pdvs',['Nome'],x=>[esc(x.name)],'<button class="btn btn-primary" onclick="editPdv()">+ Adicionar</button>')}
+async function editPdv(id){const x=id?db.pdvs.find(x=>Number(x.id)===Number(id))||{}:{};$('modalTitle').textContent='PDV';$('modalBody').innerHTML=`<div class="form-group"><label>Nome do PDV</label><input id="pName" value="${esc(x.name||'')}"></div><button class="btn btn-primary" onclick="savePdv(${id||0})">Salvar</button>`;$('modal').classList.remove('hidden')}
+async function savePdv(id){try{const d={name:$('pName').value.trim()};if(!d.name)return alert('Informe o nome.');const q=id?sb.from('pdvs').update(d).eq('id',id):sb.from('pdvs').insert(d);const {error}=await q;if(error)throw error;await loadDB();pdvModal()}catch(e){fail(e)}}
+
+function operatorModal(){listManager('Operadoras','operators',['Operadora','Planos / Comissão'],x=>[esc(x.name),db.plans.filter(p=>Number(p.operatorId)===Number(x.id)).map(p=>`${esc(p.name)} (${money(p.value)} · comissão ${money(p.commission||0)})`).join('<br>')],'<button class="btn btn-primary" onclick="editOperator()">+ Adicionar</button>')}
+async function editOperator(id){const x=id?db.operators.find(x=>Number(x.id)===Number(id))||{}:{};const plans=id?db.plans.filter(p=>Number(p.operatorId)===Number(id)):[];$('modalTitle').textContent='Operadora';$('modalBody').innerHTML=`<div class="form-group"><label>Nome da operadora</label><input id="opName" value="${esc(x.name||'')}"></div><div id="planRows">${plans.map((p,i)=>planRow(p,i)).join('')}</div><button class="btn btn-secondary" onclick="addPlanRow()">+ Plano</button> <button class="btn btn-primary" onclick="saveOperator(${id||0})">Salvar</button>`;$('modal').classList.remove('hidden')}
+function planRow(p={},i=0){return `<div class="grid" style="margin:6px 0" data-plan-id="${p.id||''}"><input class="plName" placeholder="Nome do plano" value="${esc(p.name||'')}"><input class="plValue" type="number" step="0.01" placeholder="Valor" value="${p.value??''}"><input class="plCommission" type="number" step="0.01" placeholder="Comissão" value="${p.commission??''}"></div>`}
+function addPlanRow(){const e=document.createElement('div');e.innerHTML=planRow({},Date.now());$('planRows').appendChild(e.firstElementChild)}
+async function saveOperator(id){try{const name=$('opName').value.trim();if(!name)return alert('Informe o nome.');let operatorId=id;if(id){const {error}=await sb.from('operators').update({name}).eq('id',id);if(error)throw error}else{const {data,error}=await sb.from('operators').insert({name}).select().single();if(error)throw error;operatorId=data.id}const rows=[...document.querySelectorAll('#planRows .grid')];for(const r of rows){const pname=r.querySelector('.plName').value.trim();if(!pname)continue;const value=Number(r.querySelector('.plValue').value)||0,commission=Number(r.querySelector('.plCommission').value)||0,planId=Number(r.dataset.planId)||0;const payload={operator_id:operatorId,name:pname,value,commission,active:true};const q=planId?sb.from('plans').update(payload).eq('id',planId):sb.from('plans').insert(payload);const {error}=await q;if(error)throw error}await loadDB();operatorModal()}catch(e){fail(e)}}
+
+function attendanceConfigModal(){$('modalTitle').textContent='Configuração de atendimentos';$('modalBody').innerHTML=`<div class="form-group"><label>Motivos (um por linha)</label><textarea id="reasons">${esc(db.attendanceConfig.reasons.join('\n'))}</textarea></div><div class="form-group"><label>Status (um por linha)</label><textarea id="statuses">${esc(db.attendanceConfig.statuses.join('\n'))}</textarea></div><p class="muted">As listas são gravadas nas tabelas attendance_reasons e attendance_statuses.</p><button class="btn btn-primary" onclick="saveAttConfig()">Salvar</button>`;$('modal').classList.remove('hidden')}
+async function saveAttConfig(){try{const reasons=$('reasons').value.split('\n').map(x=>x.trim()).filter(Boolean),statuses=$('statuses').value.split('\n').map(x=>x.trim()).filter(Boolean);const oldR=await sb.from('attendance_reasons').select('id,name');if(oldR.error)throw oldR.error;const oldS=await sb.from('attendance_statuses').select('id,name');if(oldS.error)throw oldS.error;await sb.from('attendance_reasons').delete().not('id','is',null);await sb.from('attendance_statuses').delete().not('id','is',null);if(reasons.length){const {error}=await sb.from('attendance_reasons').insert(reasons.map(name=>({name,active:true})));if(error)throw error}if(statuses.length){const {error}=await sb.from('attendance_statuses').insert(statuses.map(name=>({name,active:true})));if(error)throw error}closeModal();await loadDB();refresh()}catch(e){fail(e)}}
+
+function manageHelpLinksModal(){
+  listManager('Links de Ajuda', 'helpLinks', ['Descrição', 'Link'], x => [esc(x.title), `<a href="${esc(x.url)}" target="_blank" style="color:var(--primary);text-decoration:underline">${esc(x.url)}</a>`], '<button class="btn btn-primary" onclick="editHelpLink()">+ Adicionar Link</button>');
+}
+
+async function editHelpLink(id){
+  const x = id ? db.helpLinks.find(item => Number(item.id) === Number(id)) || {} : {};
+  $('modalTitle').textContent = id ? 'Editar Link' : 'Novo Link';
+  $('modalBody').innerHTML = `
+    <div class="form-group"><label>Descrição *</label><input id="hlTitle" value="${esc(x.title || '')}"></div>
+    <div class="form-group"><label>Link (URL) *</label><input id="hlUrl" value="${esc(x.url || '')}" placeholder="https://..."></div>
+    <button class="btn btn-primary" onclick="saveHelpLink(${id || 0})">Salvar</button>
+  `;
+  $('modal').classList.remove('hidden');
+}
+
+async function saveHelpLink(id){
+  try {
+    const title = $('hlTitle').value.trim();
+    const url = $('hlUrl').value.trim();
+    if(!title || !url) return alert('Preencha a descrição e o link.');
+    const payload = { title, url };
+    const q = id ? sb.from('help_links').update(payload).eq('id', id) : sb.from('help_links').insert(payload);
+    const { error } = await q;
+    if(error) throw error;
+    closeModal();
+    await loadDB();
+    refresh();
+    manageHelpLinksModal();
+  } catch(e) {
+    fail(e);
+  }
+}
+
+async function delManager(type,id){
+  if(!isAdmin())return alert('Somente o admin pode excluir cadastros.');
+  if(!id)return alert('Registro inválido.');
+  if(type==='users'&&String(id)===String(current?.id))return alert('Você não pode excluir o próprio usuário logado.');
+  if(!confirm('Excluir cadastro?'))return;
+
+  try{
+    const table={
+      operators:'operators',
+      sellers:'sellers',
+      pdvs:'pdvs',
+      users:'profiles',
+      helpLinks:'help_links',
+      individualProducts:'individual_products'
+    }[type];
+
+    if(!table)return;
+
+    const {error}=await sb.from(table).delete().eq('id',id);
+    if(error)throw error;
+
+    await loadDB();
+    manage(type);
+  }catch(e){
+    fail(e,`Falha ao excluir ${type}`);
+  }
+}
+
+function individualProductsModal(){listManager('Produtos Individuais','individualProducts',['Produto','Valor','Comissão','PDVs','Ativo'],x=>[esc(x.name),money(x.value),money(x.commission),esc((x.pdvIds||[]).map(id=>db.pdvs.find(p=>Number(p.id)===Number(id))?.name).filter(Boolean).join(', ')),x.active?'Sim':'Não'],'<button class="btn btn-primary" onclick="editIndividualProduct()">+ Adicionar Produto</button>')}
+async function editIndividualProduct(id){const x=id?db.individualProducts.find(v=>Number(v.id)===Number(id))||{}:{};$('modalTitle').textContent=id?'Editar Produto Individual':'Novo Produto Individual';$('modalBody').innerHTML=`<div class="grid"><div class="form-group"><label>Nome do produto *</label><input id="ipName" value="${esc(x.name||'')}"></div><div class="form-group"><label>Valor do produto *</label><input id="ipValueForm" type="number" step="0.01" value="${x.value??''}"></div><div class="form-group"><label>Valor da comissão *</label><input id="ipCommissionForm" type="number" step="0.01" value="${x.commission??''}"></div><div class="form-group"><label>Ativo</label><select id="ipActive"><option value="true">Sim</option><option value="false">Não</option></select></div><div class="form-group full"><label>PDVs onde aparecerá *</label><select id="ipPdvs" multiple size="6">${db.pdvs.map(p=>`<option value="${p.id}" ${(x.pdvIds||[]).map(Number).includes(Number(p.id))?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div></div><button class="btn btn-primary" onclick="saveIndividualProduct(${id||0})">Salvar</button>`;$('ipActive').value=String(x.active!==false);$('modal').classList.remove('hidden')}
+async function saveIndividualProduct(id){try{const name=$('ipName').value.trim().toUpperCase(),value=Number($('ipValueForm').value)||0,commission=Number($('ipCommissionForm').value)||0,pdvIds=[...$('ipPdvs').selectedOptions].map(o=>Number(o.value)),active=$('ipActive').value==='true';if(!name||!value||!pdvIds.length)return alert('PREENCHA PRODUTO, VALOR E PELO MENOS UM PDV.');const payload={name,value,commission,pdv_ids:pdvIds,active,updated_at:new Date().toISOString()};const q=id?sb.from('individual_products').update(payload).eq('id',id):sb.from('individual_products').insert(payload);const {error}=await q;if(error)throw error;await loadDB();individualProductsModal()}catch(e){fail(e)}}
+function visibleIndividualSales(){let a=db.individualSales;if(current?.role==='usuario')a=a.filter(x=>Number(x.sellerId)===Number(current.sellerId));if(current?.role==='bko'||current?.role==='supervisor')a=a.filter(x=>Number(x.pdvId)===Number(seller()?.pdvId));return a}
+function fillIndividualPdvFilter(){const e=$('ipPDV');if(!e)return;const old=e.value;e.innerHTML='<option value="">PDV</option>'+[...new Set(visibleIndividualSales().map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name).filter(Boolean))].sort().map(n=>`<option>${esc(n)}</option>`).join('');e.value=old}
+function filteredIndividualSales(){const q=($('ipSearch')?.value||'').toUpperCase(),pdv=$('ipPDV')?.value||'',date=$('ipData')?.value||'';return visibleIndividualSales().filter(x=>(!q||[x.cpf,x.name,x.phone,x.productName].join(' ').toUpperCase().includes(q))&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv)&&(!date||x.saleDate===date))}
+function renderIndividualSales(){if(!$('individualSalesBody'))return;const a=filteredIndividualSales();$('ipCount').textContent=a.length;$('ipValue').textContent=money(a.reduce((t,x)=>t+Number(x.value||0),0));$('ipCommission').textContent=money(a.reduce((t,x)=>t+Number(x.commission||0),0));$('individualSalesBody').innerHTML=a.map(x=>`<tr><td>${fmtDate(x.saleDate)}</td><td>${esc(x.cpf)}</td><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.productName)}</td><td>${money(x.value)}</td><td>${money(x.commission)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td>${esc(x.obs||'')}</td><td>${canEditIndividualSale(x)?`<button class="btn btn-secondary" onclick="openIndividualSale(${x.id})">Editar</button>`:''}${isAdmin()?`<button class="btn btn-danger" onclick="deleteIndividualSale(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="11">Nenhuma venda encontrada.</td></tr>'}
+function clearIndividualFilters(){$('ipSearch').value='';$('ipPDV').value='';$('ipData').value='';renderIndividualSales()}
+function canEditIndividualSale(x){return isAdmin()||isSupervisor()||Number(x.sellerId)===Number(current?.sellerId)}
+function openIndividualSale(id){
+  const x=id?db.individualSales.find(v=>Number(v.id)===Number(id)):null;
+  if(x&&!canEditIndividualSale(x))return alert('SEM PERMISSÃO.');
+  const pdv=current?.role==='usuario'||current?.role==='supervisor'||current?.role==='bko'?seller()?.pdvId:null;
+  const products=db.individualProducts.filter(p=>p.active!==false&&(!pdv||(p.pdvIds||[]).map(Number).includes(Number(pdv))));
+  const isCnpj = docDigits(x?.cpf).length > 11;
+
+  $('modalTitle').textContent=x?'Editar Venda de Produto':'Nova Venda de Produto';
+  $('modalBody').innerHTML=`<div class="grid">
+  <div class="form-group">
+    <label>Documento *</label>
+    <div class="doc-group">
+      <select id="isDocType" class="doc-type-select" onchange="onDocTypeChange('isDocType','isCpf')">
+        <option value="CPF" ${!isCnpj?'selected':''}>CPF</option>
+        <option value="CNPJ" ${isCnpj?'selected':''}>CNPJ</option>
+      </select>
+      <input id="isCpf" value="${esc(x?.cpf||'')}">
+    </div>
+  </div>
+  <div class="form-group"><label>Nome *</label><input id="isName" value="${esc(x?.name||'')}"></div>
+  <div class="form-group"><label>Telefone *</label><input id="isPhone" value="${esc(x?.phone||'')}"></div>
+  <div class="form-group"><label>Produto *</label><select id="isProduct" onchange="updateIndividualSaleValue()">${products.map(p=>`<option value="${p.id}" ${Number(x?.productId)===Number(p.id)?'selected':''}>${esc(p.name)} — ${money(p.value)}</option>`).join('')}</select></div>
+  <div class="form-group"><label>Valor</label><input id="isValue" readonly></div>
+  <div class="form-group"><label>Comissão</label><input id="isCommission" readonly></div>
+  <div class="form-group"><label>Vendedor *</label><select id="isSeller" ${current?.role==='usuario'?'disabled':''}>${db.sellers.map(s=>`<option value="${s.id}" ${Number(x?.sellerId||current?.sellerId)===Number(s.id)?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div>
+  <div class="form-group"><label>PDV *</label><select id="isPdv" ${current?.role==='usuario'?'disabled':''}>${db.pdvs.map(p=>`<option value="${p.id}" ${Number(x?.pdvId||seller()?.pdvId)===Number(p.id)?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
+  <div class="form-group"><label>Data da venda</label><input id="isDate" type="date" value="${esc(x?.saleDate||today())}"></div>
+  <div class="form-group full"><label>Observação</label><textarea id="isObs">${esc(x?.obs||'')}</textarea></div>
+  </div><button class="btn btn-primary" onclick="saveIndividualSale(${id||0})">Salvar</button>`;
+  updateIndividualSaleValue(x?.productId);
+  setupCPFField($('isCpf'), 'isDocType');
+  $('modal').classList.remove('hidden');
+}
+function updateIndividualSaleValue(selected){const p=db.individualProducts.find(v=>Number(v.id)===Number(selected||$('isProduct')?.value));if($('isValue'))$('isValue').value=money(p?.value||0);if($('isCommission'))$('isCommission').value=money(p?.commission||0)}
+async function saveIndividualSale(id){try{const old=id?db.individualSales.find(v=>Number(v.id)===Number(id)):null;if(old&&!canEditIndividualSale(old))return alert('SEM PERMISSÃO.');const p=db.individualProducts.find(v=>Number(v.id)===Number($('isProduct').value));if(!p)return alert('SELECIONE UM PRODUTO.');const sellerId=current.role==='usuario'?current.sellerId:(Number($('isSeller')?.value)||old?.sellerId||current.sellerId);const pdvId=current.role==='usuario'?seller()?.pdvId:(Number($('isPdv').value)||old?.pdvId||seller()?.pdvId);if(!validateCPFField('isCpf',true,'isDocType'))return;const cpf=$('isCpf').value;const payload={cpf,name:$('isName').value.trim().toUpperCase(),phone:$('isPhone').value.trim(),product_id:p.id,product_name:p.name,value:Number(p.value||0),commission:Number(p.commission||0),seller_id:sellerId,pdv_id:pdvId,sale_date:$('isDate').value||today(),observation:$('isObs').value.trim()};if(!payload.cpf||!payload.name||!payload.phone||!sellerId||!pdvId)return alert('PREENCHA DOCUMENTO, NOME, TELEFONE, VENDEDOR E PDV.');$('isCpf').value=cpf;const q=id?sb.from('individual_sales').update(payload).eq('id',id):sb.from('individual_sales').insert(payload);const {error}=await q;if(error)throw error;closeModal();await loadDB();refresh()}catch(e){fail(e)}}
+async function deleteIndividualSale(id){if(!isAdmin())return alert('SOMENTE ADMIN PODE EXCLUIR VENDAS INDIVIDUAIS.');if(!confirm('EXCLUIR ESTA VENDA?'))return;const {error}=await sb.from('individual_sales').delete().eq('id',id);if(error)return fail(error);await loadDB();refresh()}
+function exportIndividualExcel(){if(!canAll())return alert('APENAS ADMIN E SUPERVISOR PODEM EXPORTAR.');const rows=filteredIndividualSales().map(x=>({DATA:x.saleDate,"CPF/CNPJ":x.cpf,NOME:x.name,TELEFONE:x.phone,PRODUTO:x.productName,VALOR:Number(x.value||0),COMISSAO:Number(x.commission||0),VENDEDOR:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'',PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'',OBSERVACAO:x.obs||''}));if(!rows.length)return alert('NÃO HÁ REGISTROS PARA EXPORTAR.');const ws=XLSX.utils.json_to_sheet(rows),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'VENDAS INDIVIDUAIS');XLSX.writeFile(wb,'vendas_individuais_'+today()+'.xlsx')}
+
+function closeModal(){$('modal').classList.add('hidden')}
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
+
+document.addEventListener('input',e=>{const el=e.target;if(!el.matches('input,textarea'))return;if(el.type==='password'||el.type==='email'||el.type==='url'||el.type==='date'||el.type==='number'||el.readOnly)return;const pos=el.selectionStart;el.value=el.value.toUpperCase();try{el.setSelectionRange(pos,pos)}catch(_){}}); 
+(async()=>{
+  try{
+    const id=localStorage.getItem('svendas_profile_id');
+    if(!id)return;
+    const {data:profile,error}=await sb.from('profiles').select('*').eq('id',id).eq('active',true).maybeSingle();
+    if(error)throw error;
+    if(!profile){localStorage.removeItem('svendas_profile_id');return;}
+    current=normalizeProfile(profile);
+    await loadDB();
+    applySettings();
+    $('login').classList.add('hidden');$('app').classList.remove('hidden');
+    $('currentUser').textContent=(current.user||'')+' · '+roleLabel(current.role);
+    document.querySelectorAll('.admin-only,.privileged-only').forEach(e=>e.classList.toggle('hidden',!canAll()));
+    refresh();
+  }catch(e){
+    console.error('Erro ao restaurar sessão local:',e);
+    $('loginError').textContent='Não foi possível carregar o sistema: '+(e?.message||e);
+    localStorage.removeItem('svendas_profile_id');
+  }
+})();
+</script>
+</body>
+</html>
