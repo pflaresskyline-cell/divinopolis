@@ -16,7 +16,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden
 .btn{padding:10px 15px;border-radius:9px;font-weight:700}.btn-primary{background:var(--primary);color:#fff}.btn-secondary{background:#e2e8f0;color:var(--dark)}.btn-danger{background:var(--danger);color:#fff}.btn-success{background:var(--success);color:#fff}.btn-warning{background:var(--warning);color:#fff}
 #app{min-height:100vh}.topbar{height:64px;background:var(--dark);color:#fff;display:flex;align-items:center;padding:0 20px;gap:18px;position:sticky;top:0;z-index:10}.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800}.brand img{height:42px;max-width:150px;object-fit:contain}.topbar .spacer{flex:1}.user-chip{background:#ffffff15;padding:8px 12px;border-radius:20px;font-size:13px}
 .layout{display:flex;min-height:calc(100vh - 64px)}.sidebar{width:245px;background:#fff;border-right:1px solid #e2e8f0;padding:15px}.nav-btn{display:block;width:100%;padding:12px 13px;text-align:left;background:transparent;border-radius:9px;margin:3px 0;color:#334155;font-weight:650}.nav-btn:hover,.nav-btn.active{background:#dbeafe;color:#1d4ed8}.content{flex:1;padding:24px;overflow:auto}.page{display:none}.page.active{display:block}.page-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.page-title h2{margin:0}.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:18px}.card{background:var(--card);border:1px solid #e2e8f0;border-radius:14px;padding:18px;box-shadow:0 2px 8px #0f172a08}.metric{font-size:27px;font-weight:800;margin-top:6px}.muted{color:var(--muted);font-size:13px}.alert{padding:13px;border-radius:10px;margin:8px 0}.alert.warning{background:#fef3c7;color:#92400e}.alert.danger{background:#fee2e2;color:#991b1b}.alert.success{background:#dcfce7;color:#166534}
-.table-wrap{overflow:auto;background:#fff;border:1px solid #e2e8f0;border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:13px}.table th{background:#f8fafc;position:sticky;top:0}.actions{display:flex;gap:6px;flex-wrap:wrap}.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:15px}.filters input,.filters select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px}
+.table-wrap{overflow:auto;background:#fff;border:1px solid #e2e8f0;border-radius:12px}.table{width:100%;border-collapse:collapse;min-width:850px}.table th,.table td{padding:10px 12px;border-bottom:1px solid #e2e8f0;text-align:left;font-size:13px}.table th{background:#f8fafc;position:sticky;top:0}.actions{display:flex;gap:6px;flex-wrap:wrap}.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:15px}.filters input,.filters select{width:100%;padding:9px;border:1px solid #cbd5e1;border-radius:8px}.filter-row th{background:#fff;padding:6px}.filter-row input{width:100%;padding:7px;border:1px solid #cbd5e1;border-radius:7px;font-size:12px}
 .modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:15px;z-index:50}.modal-box{background:#fff;border-radius:15px;width:min(900px,100%);max-height:92vh;overflow:auto;padding:22px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.modal-head h3{margin:0}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.grid .full{grid-column:1/-1}.logo-preview{max-height:90px;max-width:250px;object-fit:contain;border:1px dashed #cbd5e1;border-radius:8px;padding:8px}
 .badge{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:800}.badge.Vendido{background:#dbeafe;color:#1d4ed8}.badge.Instalado{background:#dcfce7;color:#166534}.badge.Pendente,.badge.PendenteBKO{background:#fef3c7;color:#92400e}.badge.Cancelado{background:#fee2e2;color:#991b1b}.badge.Concluído{background:#dcfce7;color:#166534}
 @media(max-width:800px){.sidebar{width:68px;padding:8px}.nav-btn{font-size:0;text-align:center}.nav-btn:first-letter{font-size:18px}.content{padding:14px}.grid{grid-template-columns:1fr}.topbar{padding:0 10px}.brand span{display:none}}
@@ -46,10 +46,12 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden
 <div class="layout">
 <aside class="sidebar">
   <button class="nav-btn active" onclick="showPage('dashboard',this)">📊 Dashboard</button>
+  <button class="nav-btn" onclick="showPage('baseAntiga',this)">🗃️ Nossa Base</button>
   <button class="nav-btn" onclick="showPage('vendas',this)">🛒 Vendas</button>
   <button class="nav-btn" onclick="showPage('vendasIndividuais',this)">📦 Venda de Produto Individual</button>
   <button class="nav-btn" onclick="showPage('atendimentos',this)">🎧 Atendimento</button>
   <button class="nav-btn" onclick="showPage('relatorios',this)">📈 Relatórios</button>
+  <button class="nav-btn" onclick="showPage('comissao',this)">💰 Comissão</button>
   <button class="nav-btn" onclick="showPage('ajuda',this)">❓ Ajuda</button>
   <button class="nav-btn privileged-only" onclick="showPage('config',this)">⚙️ Configuração</button>
 </aside>
@@ -79,6 +81,26 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden
  <div class="card"><h3>Últimas vendas</h3><div id="recentSales"></div></div>
 </section>
 
+<section id="baseAntiga" class="page">
+ <div class="page-title"><h2>Nossa Base</h2><div class="actions"><button class="btn btn-secondary" onclick="clearOldBaseFilters()">Limpar filtros</button><button class="btn btn-success" onclick="exportOldBaseFiltered()">Exportar filtrados</button></div></div>
+ <div class="alert success"><b>Base independente:</b> os dados importados aqui ficam exclusivamente na tabela <code>base_antiga</code> e não alteram vendas, atendimentos, clientes ou qualquer tabela da operação atual.</div>
+ <div class="card">
+  <div class="filters">
+   <input id="oldBaseFile" type="file" accept=".xlsx,.xls,.csv" onchange="previewOldBaseFile(this)">
+   <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700"><input id="oldBaseReplace" type="checkbox"> Substituir a base atual</label>
+   <button class="btn btn-primary" onclick="importOldBase()">Importar e salvar no Supabase</button>
+  </div>
+  <div id="oldBaseImportInfo" class="muted">Selecione XLSX, XLS ou CSV. Todos os registros são gravados no Supabase; colunas extras da planilha também são preservadas.</div>
+ </div>
+ <div class="card" style="margin-top:18px">
+  <div class="muted" style="margin-bottom:10px">Todos os campos abaixo possuem filtro próprio. O filtro é aplicado à linha inteira.</div>
+  <div class="table-wrap"><table class="table" style="min-width:1800px"><thead>
+   <tr><th>Data</th><th>Operadora</th><th>Nome</th><th>CPF</th><th>Contato</th><th>Consultor</th><th>Plano</th><th>Valor</th><th>Agendamento</th><th>Período</th><th>Cidade</th><th>Situação</th><th>Observação</th></tr>
+   <tr class="filter-row"><th><input id="obfData" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfOperadora" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfNome" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfCpf" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfContato" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfConsultor" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfPlano" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfValor" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfAgendamento" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfPeriodo" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfCidade" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfSituacao" placeholder="Filtrar" oninput="renderOldBase()"></th><th><input id="obfObservacao" placeholder="Filtrar" oninput="renderOldBase()"></th></tr>
+  </thead><tbody id="oldBaseBody"></tbody></table></div>
+ </div>
+</section>
+
 <section id="vendas" class="page">
  <div class="page-title"><h2>Cadastro de Vendas</h2><button class="btn btn-primary" onclick="openSale()">+ Cadastrar venda</button></div>
  <div class="filters">
@@ -87,6 +109,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden
   <select id="fStatus" onchange="renderSales()"><option value="">Status</option><option>Vendido</option><option>Instalado</option><option>Pendente</option><option>Cancelado</option><option>Pendente BKO</option></select>
   <select id="fVendedor" onchange="renderSales()"><option value="">Vendedor</option></select>
   <select id="fPDV" onchange="renderSales()"><option value="">PDV</option></select>
+  <input id="fBusca" placeholder="CPF/CNPJ - Nome do cliente - Telefone - Protocolo" oninput="renderSales()">
   <input id="fContractId" placeholder="ID contrato" oninput="renderSales()">
   <input id="fLineNumber" placeholder="Número da linha" oninput="renderSales()">
   <select id="fPlano" onchange="renderSales()"><option value="">Plano</option></select>
@@ -101,6 +124,8 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden
     <input id="ipSearch" placeholder="Buscar CPF/CNPJ, nome, telefone ou produto" oninput="renderIndividualSales()">
     <select id="ipPDV" onchange="renderIndividualSales()"><option value="">PDV</option></select>
     <input id="ipData" type="date" onchange="renderIndividualSales()">
+    <select id="ipMes" onchange="renderIndividualSales()"><option value="">Mês</option></select>
+    <select id="ipAno" onchange="renderIndividualSales()"><option value="">Ano</option></select>
     <button class="btn btn-secondary" onclick="clearIndividualFilters()">Limpar</button>
     <button class="btn btn-success" onclick="exportIndividualExcel()">Exportar Excel</button>
   </div>
@@ -109,11 +134,38 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0}.hidden
 </section>
 
 <section id="atendimentos" class="page">
- <div class="page-title"><h2>Atendimento</h2><div><button class="btn btn-primary" onclick="openAttendance()">+ Novo atendimento</button><button class="btn btn-secondary" onclick="openReopen()">🔓 Reabrir</button></div></div>
- <div class="card"><div class="filters"><input id="searchProtocol" placeholder="Buscar por protocolo, CPF/CNPJ ou nome" oninput="renderAttendances()"><select id="attStatus" onchange="renderAttendances()"><option value="">Todos os status</option></select><select id="attPDV" onchange="renderAttendances()"><option value="">PDV</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Protocolo</th><th>Data/hora</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone</th><th>Motivo</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Ações</th></tr></thead><tbody id="attBody"></tbody></table></div></div>
+ <div class="page-title"><h2>Atendimento</h2><div><button class="btn btn-primary" onclick="openAttendance()">+ Novo atendimento</button></div></div>
+ <div class="card"><div class="filters"><input id="searchProtocol" placeholder="Buscar por protocolo, CPF/CNPJ ou nome" oninput="renderAttendances()"><select id="attStatus" onchange="renderAttendances()"><option value="">Todos os status</option></select><select id="attPDV" onchange="renderAttendances()"><option value="">PDV</option></select><select id="attMes" onchange="renderAttendances()"><option value="">Mês</option></select><select id="attAno" onchange="renderAttendances()"><option value="">Ano</option></select></div><div class="table-wrap"><table class="table"><thead><tr><th>Protocolo</th><th>Data/hora</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone</th><th>Motivo</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Ações</th></tr></thead><tbody id="attBody"></tbody></table></div></div>
 </section>
 
-<section id="relatorios" class="page"><div class="page-title"><h2>Relatórios</h2><div><button class="btn btn-success" onclick="exportCSV('sales')">Exportar vendas</button><button class="btn btn-success" onclick="exportCSV('attendance')">Exportar atendimentos</button></div></div><div class="card"><h3>Relatório de Vendas</h3><div class="filters"><input id="rData" type="date" onchange="renderReports()"><select id="rMes" onchange="renderReports()"><option value="">Mês</option></select><select id="rAno" onchange="renderReports()"><option value="">Ano</option></select><select id="rVendedor" onchange="renderReports()"><option value="">Vendedor</option></select><select id="rPDV" onchange="renderReports()"><option value="">PDV</option></select><select id="rOperadora" onchange="renderReports()"><option value="">Operadora</option></select><select id="rPlano" onchange="renderReports()"><option value="">Plano</option></select><select id="rStatus" onchange="renderReports()"><option value="">Status</option><option>Vendido</option><option>Instalado</option><option>Pendente</option><option>Pendente BKO</option><option>Cancelado</option></select><button class="btn btn-secondary" onclick="clearReportFilters()">Limpar</button></div><div class="cards"><div class="card"><b>Vendas</b><div class="metric" id="rVendas">0</div></div><div class="card"><b>Valor total</b><div class="metric" id="rValor">R$ 0,00</div></div></div><div class="table-wrap"><table class="table" style="min-width:1250px"><thead><tr><th>Data</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone(s)</th><th>Operadora</th><th>Plano</th><th>Valor</th><th>Comissão</th><th>Instalação</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Endereço</th><th>Observação</th></tr></thead><tbody id="reportSalesBody"></tbody></table></div></div><div class="card" style="margin-top:18px"><h3>Relatório de Atendimentos</h3><div class="table-wrap"><table class="table" style="min-width:1000px"><thead><tr><th>Protocolo</th><th>Data/Hora</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone</th><th>Motivo</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Observação</th></tr></thead><tbody id="reportAttBody"></tbody></table></div></div></section>
+<section id="relatorios" class="page"><div class="page-title"><h2>Relatórios</h2><div><button class="btn btn-success" onclick="exportCSV('sales')">Exportar vendas</button><button class="btn btn-success" onclick="exportCSV('attendance')">Exportar atendimentos</button></div></div><div class="card"><h3>Relatório de Vendas</h3><div class="filters"><input id="rBusca" placeholder="CPF/CNPJ - Nome do cliente - Telefone - Protocolo" oninput="renderReports()"><input id="rData" type="date" onchange="renderReports()"><select id="rMes" onchange="renderReports()"><option value="">Mês</option></select><select id="rAno" onchange="renderReports()"><option value="">Ano</option></select><select id="rVendedor" onchange="renderReports()"><option value="">Vendedor</option></select><select id="rPDV" onchange="renderReports()"><option value="">PDV</option></select><select id="rOperadora" onchange="renderReports()"><option value="">Operadora</option></select><select id="rPlano" onchange="renderReports()"><option value="">Plano</option></select><select id="rStatus" onchange="renderReports()"><option value="">Status</option><option>Vendido</option><option>Instalado</option><option>Pendente</option><option>Pendente BKO</option><option>Cancelado</option></select><button class="btn btn-secondary" onclick="clearReportFilters()">Limpar</button></div><div class="cards"><div class="card"><b>Vendas</b><div class="metric" id="rVendas">0</div></div><div class="card"><b>Valor total</b><div class="metric" id="rValor">R$ 0,00</div></div></div><div class="table-wrap"><table class="table" style="min-width:1250px"><thead><tr><th>Data</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone(s)</th><th>Operadora</th><th>Plano</th><th>Valor</th><th>Comissão</th><th class="admin-only">Valor que vou receber</th><th class="admin-only">Comissão que vou receber</th><th>Instalação</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Endereço</th><th>Observação</th></tr></thead><tbody id="reportSalesBody"></tbody></table></div></div><div class="card" style="margin-top:18px"><h3>Relatório de Atendimentos</h3><div class="filters"><input id="raBusca" placeholder="Protocolo, cliente ou CPF/CNPJ" oninput="renderReports()"><select id="raStatus" onchange="renderReports()"><option value="">Status</option></select><select id="raPDV" onchange="renderReports()"><option value="">PDV</option></select><select id="raMes" onchange="renderReports()"><option value="">Mês</option></select><select id="raAno" onchange="renderReports()"><option value="">Ano</option></select><button class="btn btn-secondary" onclick="clearReportAttendanceFilters()">Limpar</button></div><div class="table-wrap"><table class="table" style="min-width:1000px"><thead><tr><th>Protocolo</th><th>Data/Hora</th><th>Cliente</th><th>CPF/CNPJ</th><th>Telefone</th><th>Motivo</th><th>Status</th><th>Vendedor</th><th>PDV</th><th>Observação</th></tr></thead><tbody id="reportAttBody"></tbody></table></div></div></section>
+
+<section id="comissao" class="page">
+ <div class="page-title"><h2>Comissão</h2><button class="btn btn-success" onclick="exportCommission()">Exportar filtrados</button></div>
+ <div class="card"><div class="filters">
+  <input id="cDataVenda" type="date" title="Data da venda" onchange="renderCommission()">
+  <input id="cDataInst" type="date" title="Data da instalação" onchange="renderCommission()">
+  <select id="cMes" onchange="renderCommission()"><option value="">Mês da instalação</option></select>
+  <select id="cAno" onchange="renderCommission()"><option value="">Ano da instalação</option></select>
+  <select id="cVendedor" class="commission-admin-only" onchange="renderCommission()"><option value="">Vendedor</option></select>
+  <select id="cPDV" class="commission-admin-only" onchange="renderCommission()"><option value="">PDV</option></select>
+  <select id="cOperadora" onchange="renderCommission()"><option value="">Operadora</option></select>
+  <select id="cPlano" onchange="renderCommission()"><option value="">Plano</option></select>
+  <select id="cStatus" onchange="renderCommission()"><option value="">Status</option></select>
+  <select id="cValor" onchange="renderCommission()"><option value="">Valor da venda</option></select>
+  <select id="cComissao" onchange="renderCommission()"><option value="">Comissão</option></select>
+  <button class="btn btn-secondary" onclick="clearCommissionFilters()">Limpar filtros</button>
+ </div></div>
+ <div class="cards">
+  <div class="card"><div class="muted">Instaladas no mês</div><div class="metric" id="cInstaladas">0</div></div>
+  <div class="card"><div class="muted">Pendentes</div><div class="metric" id="cPendentes">0</div></div>
+  <div class="card"><div class="muted">Canceladas</div><div class="metric" id="cCanceladas">0</div></div>
+  <div class="card"><div class="muted">Vendas de meses anteriores instaladas neste mês</div><div class="metric" id="cCarryover">0</div></div>
+  <div class="card"><div class="muted">Comissão a receber</div><div class="metric" id="cReceber">R$ 0,00</div></div>
+ </div>
+ <div class="card"><p class="muted">A comissão a receber soma a comissão das vendas instaladas no mês selecionado. Usuários comuns visualizam somente suas vendas; o administrador visualiza toda a empresa.</p>
+ <div class="table-wrap"><table class="table" style="min-width:1100px"><thead><tr><th>Data da venda</th><th>Data instalação</th><th>Cliente</th><th>CPF/CNPJ</th><th>Vendedor</th><th>PDV</th><th>Operadora</th><th>Plano</th><th>Valor da venda</th><th>Comissão</th><th>Status</th></tr></thead><tbody id="commissionBody"></tbody></table></div></div>
+</section>
 
 <section id="ajuda" class="page">
  <div class="page-title"><h2>Links de Ajuda e Manuais</h2></div>
@@ -153,8 +205,14 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const { createClient } = window.supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-let db={settings:{name:'Sistema de Vendas',logo:''},users:[],sellers:[],pdvs:[],operators:[],plans:[],attendanceConfig:{reasons:[],statuses:[]},sales:[],attendances:[],helpLinks:[],individualProducts:[],individualSales:[]};
+let db={settings:{name:'Sistema de Vendas',logo:''},users:[],sellers:[],pdvs:[],operators:[],plans:[],attendanceConfig:{reasons:[],statuses:[]},sales:[],attendances:[],helpLinks:[],individualProducts:[],individualSales:[],oldBase:[]};
 let current=null;
+let realtimeChannel=null;
+let realtimeTimer=null;
+let realtimeFallbackTimer=null;
+let realtimePromise=null;
+let realtimeQueued=false;
+const REALTIME_TABLES=['app_settings','profiles','sellers','pdvs','operators','plans','attendance_reasons','attendance_statuses','sales','attendances','help_links','individual_products','individual_sales','base_antiga'];
 const $=id=>document.getElementById(id);
 const money=v=>Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const today=()=>new Date().toISOString().slice(0,10);
@@ -333,43 +391,277 @@ function normalizeSettings(r){return r?{...r,logo:r.logo_url??r.logo??''}: {name
 function normalizeSeller(r){return {...r,pdvId:r.pdv_id??r.pdvId}}
 function normalizeProfile(r){return r?{...r,sellerId:r.seller_id??r.sellerId,user:r.username??r.user}:null}
 function normalizeOperator(r){return {...r}}
-function normalizePlan(r){return {...r,operatorId:r.operator_id??r.operatorId}}
-function normalizeSale(r){return {...r,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,operatorId:r.operator_id??r.operatorId,planId:r.plan_id??r.planId,operatorName:r.operator_name??r.operatorName,planName:r.plan_name??r.planName,birthDate:r.birth_date??r.birthDate,motherName:r.mother_name??r.motherName,contractId:r.id_contrato??r.contract_id??r.contractId,lineNumber:r.numero_linha??r.line_number??r.lineNumber,differentInstallAddress:r.different_install_address??r.differentInstallAddress,installDate:r.install_date??r.installDate,installAddress:{cep:r.install_cep??'',street:r.install_street??'',number:r.install_number??'',complement:r.install_complement??'',district:r.install_district??'',city:r.install_city??'',uf:r.install_uf??''},date:r.sale_date??r.date,obs:r.observation??r.obs,phones:r.phones||[],emails:r.emails||[],value:r.value,commission:r.commission,createdAt:r.created_at??r.createdAt,updatedAt:r.updated_at??r.updatedAt}}
+function normalizePlan(r){return {...r,operatorId:r.operator_id??r.operatorId,receiveValue:r.receive_value??r.receiveValue??0,receiveCommission:r.receive_commission??r.receiveCommission??0,active:r.active!==false}}
+function normalizeSale(r){return {...r,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,operatorId:r.operator_id??r.operatorId,planId:r.plan_id??r.planId,operatorName:r.operator_name??r.operatorName,planName:r.plan_name??r.planName,birthDate:r.birth_date??r.birthDate,motherName:r.mother_name??r.motherName,contractId:r.id_contrato??r.contract_id??r.contractId,lineNumber:r.numero_linha??r.line_number??r.lineNumber,differentInstallAddress:r.different_install_address??r.differentInstallAddress,installDate:r.install_date??r.installDate,installAddress:{cep:r.install_cep??'',street:r.install_street??'',number:r.install_number??'',complement:r.install_complement??'',district:r.install_district??'',city:r.install_city??'',uf:r.install_uf??''},date:r.sale_date??r.date,obs:r.observation??r.obs,phones:r.phones||[],emails:r.emails||[],value:r.value,commission:r.commission,receiveValue:r.receive_value??r.receiveValue??0,receiveCommission:r.receive_commission??r.receiveCommission??0,createdAt:r.created_at??r.createdAt,updatedAt:r.updated_at??r.updatedAt}}
 function normalizeIndividualProduct(r){return {...r,pdvIds:r.pdv_ids??r.pdvIds??[],value:r.value??0,commission:r.commission??0,active:r.active!==false}}
 function normalizeIndividualSale(r){return {...r,productId:r.product_id??r.productId,productName:r.product_name??r.productName,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,saleDate:r.sale_date??r.saleDate,value:r.value??0,commission:r.commission??0,obs:r.observation??r.obs,createdAt:r.created_at??r.createdAt}}
-function normalizeAtt(r){return {...r,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,date:r.attendance_date??r.date,obs:r.observation??r.obs}}
+function normalizeAtt(r){return {...r,sellerId:r.seller_id??r.sellerId,pdvId:r.pdv_id??r.pdvId,date:r.attendance_date??r.date,receiveValue:r.receive_value??r.receiveValue??'',receiveCommission:r.receive_commission??r.receiveCommission??'',value:r.value??'',commission:r.commission??'',obs:r.observation??r.obs}}
+function normalizeOldBase(r){return {...r,data:r.data??'',operadora:r.operadora??'',nome:r.nome??'',cpf:r.cpf??'',contato:r.contato??'',consultor:r.consultor??'',plano:r.plano??'',valor:r.valor??0,agendamento:r.agendamento??'',periodo:r.periodo??'',cidade:r.cidade??'',situacao:r.situacao??'',observacao:r.observacao??'',dadosExtras:r.dados_extras??r.dadosExtras??{},sourceFile:r.source_file??'',sourceRow:r.source_row??null,importBatch:r.import_batch??''}}
+
+// Regra do sistema: o último registro salvo/lançado aparece primeiro.
+// A data da venda, instalação ou atendimento NÃO altera essa ordem.
+function newestFirst(rows){
+  return [...(rows||[])].sort((a,b)=>{
+    const ta=a?.createdAt??a?.created_at??'';
+    const tb=b?.createdAt??b?.created_at??'';
+    const na=ta?Date.parse(String(ta)):NaN;
+    const nb=tb?Date.parse(String(tb)):NaN;
+    if(Number.isFinite(na)&&Number.isFinite(nb)&&na!==nb)return nb-na;
+    if(Number.isFinite(nb)&&!Number.isFinite(na))return 1;
+    if(Number.isFinite(na)&&!Number.isFinite(nb))return -1;
+    const ia=Number(a?.id),ib=Number(b?.id);
+    if(Number.isFinite(ia)&&Number.isFinite(ib)&&ia!==ib)return ib-ia;
+    return String(b?.id??'').localeCompare(String(a?.id??''));
+  });
+}
+function oldBaseFiltered(){
+  const fields=['Data','Operadora','Nome','Cpf','Contato','Consultor','Plano','Valor','Agendamento','Periodo','Cidade','Situacao','Observacao'];
+  const ids=['obfData','obfOperadora','obfNome','obfCpf','obfContato','obfConsultor','obfPlano','obfValor','obfAgendamento','obfPeriodo','obfCidade','obfSituacao','obfObservacao'];
+  return db.oldBase.filter(x=>ids.every((id,i)=>{const q=($(id)?.value||'').trim().toLowerCase(); if(!q)return true; const key=fields[i].toLowerCase(); const value=String(x[key]??'').toLowerCase(); return value.includes(q)}));
+}
+function oldBaseRowData(x){
+  const extra=x.dadosExtras||x.dados_extras||{};
+  return {
+    DATA:x.data,OPERADORA:x.operadora,NOME:x.nome,CPF:x.cpf,CONTATO:x.contato,
+    CONSULTOR:x.consultor,PLANO:x.plano,VALOR:Number(x.valor||0),AGENDAMENTO:x.agendamento,
+    PERIODO:x.periodo,CIDADE:x.cidade,SITUAÇÃO:x.situacao,OBSERVAÇÃO:x.observacao,
+    ...extra
+  };
+}
+function csvSafeValue(v){
+  if(v===null||v===undefined)return '';
+  if(Array.isArray(v))return v.join(', ');
+  if(typeof v==='object')return JSON.stringify(v);
+  return String(v);
+}
+
+function parseExcelDate(v){
+  if(v===null||v===undefined||v==='')return '';
+  if(typeof v==='number' && XLSX.SSF && XLSX.SSF.parse_date_code){const d=XLSX.SSF.parse_date_code(v);if(d)return `${d.y}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;}
+  const s=String(v).trim();
+  if(/^\d{4}-\d{1,2}-\d{1,2}/.test(s))return s.slice(0,10);
+  if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){const [d,m,y]=s.split('/');return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;}
+  return s;
+}
+function normalizeOldBaseImportRow(r,idx,fileName,batch){
+  const get=(...keys)=>{for(const k of keys){if(Object.prototype.hasOwnProperty.call(r,k))return r[k]}return ''};
+  const knownKeys=new Set([
+    'DATA','Data','data','OPERADORA ','OPERADORA','Operadora','operadora',
+    'NOME ','NOME','Nome','nome','CPF ','CPF','Cpf','cpf','CONTATO ','CONTATO','Contato','contato',
+    'CONSULTOR ','CONSULTOR','Consultor','consultor','PLANO ','PLANO','Plano','plano',
+    'VALOR ','VALOR','Valor','valor','AGENDAMENTO ','AGENDAMENTO','Agendamento','agendamento',
+    'PERIODO ','PERIODO','Periodo','periodo','CIDADE','Cidade','cidade',
+    'SITUAÇÃO ','SITUAÇÃO','SITUACAO','Situação','Situacao','situacao',
+    'OBSERVAÇÃO ','OBSERVAÇÃO','OBSERVACAO','Observação','Observacao','observacao'
+  ]);
+  const value=get('VALOR ','VALOR','Valor','valor');
+  const extras={};
+  Object.entries(r||{}).forEach(([k,v])=>{if(!knownKeys.has(k))extras[k]=v;});
+  return {
+    data:parseExcelDate(get('DATA','Data','data')),
+    operadora:String(get('OPERADORA ','OPERADORA','Operadora')??'').trim(),
+    nome:String(get('NOME ','NOME','Nome')??'').trim(),
+    cpf:String(get('CPF ','CPF','Cpf')??'').trim(),
+    contato:String(get('CONTATO ','CONTATO','Contato')??'').trim(),
+    consultor:String(get('CONSULTOR ','CONSULTOR','Consultor')??'').trim(),
+    plano:String(get('PLANO ','PLANO','Plano')??'').trim(),
+    valor:Number(String(value??'').replace(/[^0-9,.-]/g,'').replace(/\.(?=\d{3}(?:\D|$))/g,'').replace(',','.'))||0,
+    agendamento:parseExcelDate(get('AGENDAMENTO ','AGENDAMENTO','Agendamento')),
+    periodo:String(get('PERIODO ','PERIODO','Periodo')??'').trim(),
+    cidade:String(get('CIDADE','Cidade','cidade')??'').trim(),
+    situacao:String(get('SITUAÇÃO ','SITUAÇÃO','SITUACAO','Situação','Situacao')??'').trim(),
+    observacao:String(get('OBSERVAÇÃO ','OBSERVAÇÃO','OBSERVACAO','Observação','Observacao')??'').trim(),
+    dados_extras:extras,
+    source_file:fileName,
+    source_row:idx+2,
+    import_batch:batch
+  };
+}
+let oldBaseUploadRows=[];
+function readOldBaseFile(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{try{const wb=XLSX.read(e.target.result,{type:'array',cellDates:false});const ws=wb.Sheets[wb.SheetNames[0]];const rows=XLSX.utils.sheet_to_json(ws,{defval:''});const batch=crypto.randomUUID?.()||String(Date.now());resolve(rows.map((r,i)=>normalizeOldBaseImportRow(r,i,file.name,batch)));}catch(err){reject(err)}};
+    reader.onerror=()=>reject(reader.error||new Error('Falha ao ler o arquivo'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+function previewOldBaseFile(input){
+  const file=input?.files?.[0]; if(!file)return;
+  readOldBaseFile(file).then(rows=>{oldBaseUploadRows=rows;$('oldBaseImportInfo').textContent=`Arquivo: ${file.name} · ${rows.length} registros prontos para importar exclusivamente em base_antiga.`;}).catch(err=>{oldBaseUploadRows=[];$('oldBaseImportInfo').textContent='Não foi possível ler o arquivo.';fail(err,'Importação da base antiga')});
+}
+async function importOldBase(){
+  if(!canAll())return alert('Somente ADMIN ou SUPERVISOR podem importar a base antiga.');
+  const file=$('oldBaseFile')?.files?.[0];
+  if(!file)return alert('Selecione um arquivo XLSX, XLS ou CSV.');
+  try{
+    oldBaseUploadRows=await readOldBaseFile(file);
+    if(!oldBaseUploadRows.length)return alert('Nenhum registro válido encontrado no arquivo.');
+    if($('oldBaseReplace').checked){const {error}=await sb.from('base_antiga').delete().not('id','is',null);if(error)throw error;}
+    for(let i=0;i<oldBaseUploadRows.length;i+=500){const {error}=await sb.from('base_antiga').insert(oldBaseUploadRows.slice(i,i+500));if(error)throw error;}
+    $('oldBaseImportInfo').textContent=`Importação concluída: ${oldBaseUploadRows.length} registros salvos exclusivamente em base_antiga.`;
+    oldBaseUploadRows=[]; $('oldBaseFile').value=''; await reloadAllData();
+  }catch(e){fail(e,'Erro ao salvar a base antiga no Supabase')}
+}
+function renderOldBase(){
+  const a=oldBaseFiltered();
+  $('oldBaseBody').innerHTML=a.map(x=>`<tr><td>${esc(x.data)}</td><td>${esc(x.operadora)}</td><td>${esc(x.nome)}</td><td>${esc(x.cpf)}</td><td>${esc(x.contato)}</td><td>${esc(x.consultor)}</td><td>${esc(x.plano)}</td><td>${money(x.valor)}</td><td>${esc(x.agendamento)}</td><td>${esc(x.periodo)}</td><td>${esc(x.cidade)}</td><td>${esc(x.situacao)}</td><td>${esc(x.observacao)}</td></tr>`).join('')||'<tr><td colspan="13">Nenhum registro encontrado.</td></tr>';
+}
+function clearOldBaseFilters(){['obfData','obfOperadora','obfNome','obfCpf','obfContato','obfConsultor','obfPlano','obfValor','obfAgendamento','obfPeriodo','obfCidade','obfSituacao','obfObservacao'].forEach(id=>{if($(id))$(id).value=''});renderOldBase()}
+function renderResumo(){const a=db.oldBase||[];$('oldCount').textContent=a.length;$('oldValue').textContent=money(a.reduce((s,x)=>s+Number(x.valor||0),0));$('oldInstalled').textContent=a.filter(x=>String(x.situacao).toUpperCase().includes('INSTAL')).length;$('oldPending').textContent=a.filter(x=>/PEND|AGEND|BKO/i.test(String(x.situacao))).length;$('oldCanceled').textContent=a.filter(x=>/CANCEL/i.test(String(x.situacao))).length;const map={};a.forEach(x=>{const k=x.operadora||'SEM OPERADORA';if(!map[k])map[k]={count:0,value:0};map[k].count++;map[k].value+=Number(x.valor||0)});$('oldSummaryBody').innerHTML=Object.entries(map).sort((a,b)=>b[1].count-a[1].count).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.count}</td><td>${money(v.value)}</td></tr>`).join('')||'<tr><td colspan="3">Nenhum registro.</td></tr>'}
+function renderStatusPage(){const a=db.oldBase||[],total=a.length||1,map={};a.forEach(x=>{const k=x.situacao||'SEM STATUS';map[k]=(map[k]||0)+1});$('oldStatusBody').innerHTML=Object.entries(map).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v}</td><td>${((v/total)*100).toFixed(1)}%</td></tr>`).join('')||'<tr><td colspan="3">Nenhum registro.</td></tr>';const om={};a.forEach(x=>{const op=x.operadora||'SEM OPERADORA',st=x.situacao||'SEM STATUS';om[op]??={};om[op][st]=(om[op][st]||0)+1});const rows=[];Object.entries(om).forEach(([op,sts])=>Object.entries(sts).forEach(([st,n])=>rows.push(`<tr><td>${esc(op)}</td><td>${esc(st)}</td><td>${n}</td></tr>`)));$('oldStatusOperatorBody').innerHTML=rows.join('')||'<tr><td colspan="3">Nenhum registro.</td></tr>'}
+function exportOldBaseFiltered(){
+  if(!canAll())return alert('Apenas admin e supervisor podem exportar.');
+  const a=oldBaseFiltered();if(!a.length)return alert('Não há registros filtrados para exportar.');
+  openExportPassword(()=>{const rows=a.map(oldBaseRowData);downloadCsvRows(rows,'base_antiga_filtrada');});
+}
+function openExportPassword(onSuccess){
+  $('modalTitle').textContent='Senha para exportar';$('modalBody').innerHTML=`<div class="form-group"><label>Senha</label><input id="exportPassword" type="password" autocomplete="off" onkeydown="if(event.key==='Enter')confirmExportPassword()"><p class="muted">Digite a senha de exportação para continuar.</p></div><div class="actions"><button class="btn btn-secondary" onclick="closeModal()">Cancelar</button><button class="btn btn-success" onclick="confirmExportPassword()">Confirmar</button></div>`;$('modal').dataset.exportOk='';window._exportSuccess=onSuccess;$('modal').classList.remove('hidden');setTimeout(()=>$('exportPassword')?.focus(),50);
+}
+function confirmExportPassword(){if(($('exportPassword')?.value||'')!=='divi')return alert('Senha inválida.');const fn=window._exportSuccess;window._exportSuccess=null;closeModal();fn?.()}
+function downloadCsvRows(rows,fileName){
+  const keys=[...new Set(rows.flatMap(r=>Object.keys(r||{})))];
+  const csv='\ufeff'+[keys.join(';'),...rows.map(r=>keys.map(k=>`"${csvSafeValue(r[k]).replaceAll('"','""')}"`).join(';'))].join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=fileName+'_'+today()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+async function fetchAllRows(table, orderColumn='id', ascending=true, extraQuery=null){
+  const all=[];
+  const pageSize=1000;
+  for(let from=0;;from+=pageSize){
+    let q=sb.from(table).select('*').range(from,from+pageSize-1);
+    if(orderColumn) q=q.order(orderColumn,{ascending});
+    if(typeof extraQuery==='function') q=extraQuery(q);
+    const {data,error}=await q;
+    if(error) throw error;
+    const rows=data||[];
+    all.push(...rows);
+    if(rows.length<pageSize) break;
+  }
+  return all;
+}
+
+async function fetchAllRowsOptional(table, orderColumn='id', ascending=true, extraQuery=null){
+  try {
+    return await fetchAllRows(table,orderColumn,ascending,extraQuery);
+  } catch(error) {
+    // A tabela opcional (como base_antiga) não deve impedir que
+    // vendas, atendimentos e demais dados existentes sejam carregados.
+    console.warn('Tabela opcional não disponível:',table,error);
+    return [];
+  }
+}
+
+async function fetchOne(table, filterFn){
+  let q=sb.from(table).select('*').limit(1);
+  if(typeof filterFn==='function') q=filterFn(q);
+  const {data,error}=await q.maybeSingle();
+  if(error && error.code!=='PGRST116') throw error;
+  return data||null;
+}
 
 async function loadDB(){
-  const [settings,pdvs,sellers,operators,plans,reasons,statuses,sales,atts,profiles,profile,helpLinks,individualProducts,individualSales] = await Promise.all([
-    sb.from('app_settings').select('*').limit(1).maybeSingle(),
-    sb.from('pdvs').select('*').order('name'),
-    sb.from('sellers').select('*').order('name'),
-    sb.from('operators').select('*').order('name'),
-    sb.from('plans').select('*').order('name'),
-    sb.from('attendance_reasons').select('*').eq('active',true).order('name'),
-    sb.from('attendance_statuses').select('*').eq('active',true).order('name'),
-    sb.from('sales').select('*').order('sale_date',{ascending:false}),
-    sb.from('attendances').select('*').order('attendance_date',{ascending:false}),
-    sb.from('profiles').select('*').order('username'),
-    current?.id ? sb.from('profiles').select('*').eq('id',current.id).maybeSingle() : Promise.resolve({data:null,error:null}),
-    sb.from('help_links').select('*').order('title'),
-    sb.from('individual_products').select('*').order('name'),
-    sb.from('individual_sales').select('*').order('sale_date',{ascending:false})
+  // O Supabase normalmente limita SELECTs a 1.000 linhas. Aqui paginamos
+  // para que o sistema carregue TODOS os registros existentes, e não apenas
+  // os primeiros 1.000.
+  const [settings,pdvs,sellers,operators,plans,reasons,statuses,sales,atts,profiles,profile,helpLinks,individualProducts,individualSales,oldBase] = await Promise.all([
+    fetchOne('app_settings',q=>q),
+    fetchAllRows('pdvs','name',true),
+    fetchAllRows('sellers','name',true),
+    fetchAllRows('operators','name',true),
+    fetchAllRows('plans','name',true),
+    fetchAllRows('attendance_reasons','name',true,q=>q.eq('active',true)),
+    fetchAllRows('attendance_statuses','name',true,q=>q.eq('active',true)),
+    fetchAllRows('sales','sale_date',false),
+    fetchAllRows('attendances','attendance_date',false),
+    fetchAllRows('profiles','username',true),
+    current?.id ? fetchOne('profiles',q=>q.eq('id',current.id)) : Promise.resolve(null),
+    fetchAllRows('help_links','title',true),
+    fetchAllRows('individual_products','name',true),
+    fetchAllRows('individual_sales','sale_date',false),
+    fetchAllRowsOptional('base_antiga','id',false)
   ]);
-  for(const x of [settings,pdvs,sellers,operators,plans,reasons,statuses,sales,atts,profiles,profile,helpLinks,individualProducts,individualSales]) if(x?.error && x.error.code!=='PGRST116') throw x.error;
-  db.settings=normalizeSettings(settings.data);
-  db.pdvs=pdvs.data||[];
-  db.sellers=(sellers.data||[]).map(normalizeSeller);
-  db.operators=(operators.data||[]).map(normalizeOperator);
-  db.plans=(plans.data||[]).map(normalizePlan);
-  db.attendanceConfig={reasons:(reasons.data||[]).map(x=>x.name),statuses:(statuses.data||[]).map(x=>x.name)};
-  db.sales=(sales.data||[]).map(normalizeSale);
-  db.attendances=(atts.data||[]).map(normalizeAtt);
-  db.users=(profiles.data||[]).map(normalizeProfile);
-  db.helpLinks=helpLinks.data||[];
-  db.individualProducts=(individualProducts.data||[]).map(normalizeIndividualProduct);
-  db.individualSales=(individualSales.data||[]).map(normalizeIndividualSale);
-  if(profile.data) current={...current,...normalizeProfile(profile.data)};
+
+  db.settings=normalizeSettings(settings);
+  db.pdvs=pdvs||[];
+  db.sellers=(sellers||[]).map(normalizeSeller);
+  db.operators=(operators||[]).map(normalizeOperator);
+  db.plans=(plans||[]).map(normalizePlan);
+  db.attendanceConfig={reasons:(reasons||[]).map(x=>x.name),statuses:(statuses||[]).map(x=>x.name)};
+  db.sales=newestFirst((sales||[]).map(normalizeSale));
+  db.attendances=newestFirst((atts||[]).map(normalizeAtt));
+  db.users=(profiles||[]).map(normalizeProfile);
+  db.helpLinks=helpLinks||[];
+  db.individualProducts=(individualProducts||[]).map(normalizeIndividualProduct);
+  db.individualSales=newestFirst((individualSales||[]).map(normalizeIndividualSale));
+  db.oldBase=newestFirst((oldBase||[]).map(normalizeOldBase));
+  if(profile) current={...current,...normalizeProfile(profile)};
+}
+function reloadAllData(){
+  if(!current)return Promise.resolve();
+  if(realtimePromise){
+    realtimeQueued=true;
+    return realtimePromise;
+  }
+  realtimePromise=(async()=>{
+    try{
+      await loadDB();
+      refresh();
+    }catch(e){
+      console.error('Falha na atualização automática:',e);
+    }finally{
+      realtimePromise=null;
+      if(realtimeQueued){
+        realtimeQueued=false;
+        setTimeout(()=>reloadAllData(),50);
+      }
+    }
+  })();
+  return realtimePromise;
+}
+
+function scheduleRealtimeReload(){
+  if(!current)return;
+  clearTimeout(realtimeTimer);
+  realtimeTimer=setTimeout(()=>reloadAllData(),150);
+}
+
+function startRealtime(){
+  stopRealtime();
+  if(!current)return;
+  realtimeChannel=sb.channel('sistema-vendas-global');
+  REALTIME_TABLES.forEach(table=>{
+    realtimeChannel.on(
+      'postgres_changes',
+      {event:'*',schema:'public',table},
+      ()=>scheduleRealtimeReload()
+    );
+  });
+  realtimeChannel.subscribe(status=>{
+    if(status==='SUBSCRIBED'){
+      clearInterval(realtimeFallbackTimer);
+      realtimeFallbackTimer=null;
+    }else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT'){
+      if(!realtimeFallbackTimer){
+        realtimeFallbackTimer=setInterval(()=>{
+          if(current) reloadAllData();
+        },5000);
+      }
+    }
+  });
+}
+
+function stopRealtime(){
+  clearTimeout(realtimeTimer);
+  realtimeTimer=null;
+  if(realtimeFallbackTimer){
+    clearInterval(realtimeFallbackTimer);
+    realtimeFallbackTimer=null;
+  }
+  if(realtimeChannel){
+    try{sb.removeChannel(realtimeChannel)}catch(_){}
+    realtimeChannel=null;
+  }
 }
 
 function fail(err,context=''){
@@ -407,7 +699,7 @@ async function login(){
     $('login').classList.add('hidden');$('app').classList.remove('hidden');
     $('currentUser').textContent=(current.user||u)+' · '+roleLabel(current.role);
     document.querySelectorAll('.admin-only,.privileged-only').forEach(e=>e.classList.toggle('hidden',!canAll()));
-    try{await loadDB();applySettings();refresh()}
+    try{await loadDB();applySettings();refresh();startRealtime()}
     catch(dbErr){
       console.error('Erro ao carregar dados do sistema:',dbErr);
       $('loginError').textContent='Login realizado, mas há um problema no banco: '+(dbErr?.message||dbErr);
@@ -419,14 +711,21 @@ async function login(){
   }
 }
 async function logout(){
+  stopRealtime();
   current=null;
   localStorage.removeItem('svendas_profile_id');
-  db={settings:{name:'Sistema de Vendas',logo:''},users:[],sellers:[],pdvs:[],operators:[],plans:[],attendanceConfig:{reasons:[],statuses:[]},sales:[],attendances:[],helpLinks:[],individualProducts:[],individualSales:[]};
+  db={settings:{name:'Sistema de Vendas',logo:''},users:[],sellers:[],pdvs:[],operators:[],plans:[],attendanceConfig:{reasons:[],statuses:[]},sales:[],attendances:[],helpLinks:[],individualProducts:[],individualSales:[],oldBase:[]};
   $('app').classList.add('hidden');$('login').classList.remove('hidden');$('loginPass').value='';$('loginError').textContent='';
 }
 function applySettings(){$('brandName').textContent=db.settings.name;$('loginTitle').textContent=db.settings.name;for(const id of ['brandLogo','loginLogo']){const e=$(id);if(db.settings.logo){e.src=db.settings.logo;e.classList.remove('hidden')}else e.classList.add('hidden')}}
-function showPage(id,btn){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));btn?.classList.add('active');refresh()}
-function refresh(){if(!current)return;applySettings();renderDashboardFilters();renderDashboard();renderSales();renderAttendances();renderReports();renderHelpLinks();renderIndividualSales();fillIndividualPdvFilter();fillFilters();fillAttendancePdvFilter();renderAttStatusFilter()}
+async function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  $(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+  btn?.classList.add('active');
+  await reloadAllData();
+}
+function refresh(){if(!current)return;applySettings();renderDashboardFilters();renderDashboard();renderSales();renderAttendances();renderReports();renderHelpLinks();renderIndividualSales();fillIndividualPdvFilter();fillIndividualDateFilters();fillFilters();fillAttendancePdvFilter();renderAttStatusFilter();fillAttendanceDateFilters();renderCommission();renderOldBase()}
 
 function fillAttendancePdvFilter(){const sel=$('attPDV');if(!sel)return;const old=sel.value;const vals=[...new Set(visibleAtt().map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name).filter(Boolean))].sort();sel.innerHTML='<option value="">PDV</option>'+vals.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');sel.value=old}
 
@@ -437,6 +736,7 @@ function renderAttStatusFilter(){
   sel.innerHTML = '<option value="">Todos os status</option>' + db.attendanceConfig.statuses.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   sel.value = old;
 }
+function fillAttendanceDateFilters(){const a=visibleAtt(),m=$('attMes'),y=$('attAno');if(!m||!y)return;const om=m.value,oy=y.value;m.innerHTML='<option value="">Mês</option>';for(let i=1;i<=12;i++){const n=String(i).padStart(2,'0');m.innerHTML+=`<option value="${n}">${new Date(2000,i-1,1).toLocaleString('pt-BR',{month:'long'})}</option>`}m.value=om;const ys=[...new Set(a.map(x=>(x.date||'').slice(0,4)).filter(Boolean))].sort();y.innerHTML='<option value="">Ano</option>'+ys.map(v=>`<option value="${v}">${v}</option>`).join('');y.value=oy}
 
 function fillFilters(){
   const opts=(id,arr,fn)=>{const e=$(id),old=e.value,ph=e.options?.[0]?.textContent||'';e.innerHTML='<option value="">'+ph+'</option>';[...new Set(arr.map(fn))].filter(Boolean).sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;e.appendChild(o)});e.value=old};
@@ -452,6 +752,15 @@ function dashboardScope(){let a=visibleSales();const vend=$('dVendedor')?.value|
 function commissionForSale(x){return Number(x.commission||0)}
 function dashboardCommission(){const a=dashboardScope(),p=selectedDashboardPeriod();return a.filter(x=>x.status==='Instalado'&&x.installDate&&Number(x.installDate.slice(0,4))===p.ano&&Number(x.installDate.slice(5,7))===p.mes)}
 function carriedOverInstalled(){const a=dashboardScope(),p=selectedDashboardPeriod();let prevYear=p.ano,prevMonth=p.mes-1;if(prevMonth===0){prevMonth=12;prevYear--}return a.filter(x=>x.status==='Instalado'&&x.date&&x.installDate&&Number(x.date.slice(0,4))===prevYear&&Number(x.date.slice(5,7))===prevMonth&&Number(x.installDate.slice(0,4))===p.ano&&Number(x.installDate.slice(5,7))===p.mes).length}
+
+function commissionFilterFill(id, values, label){const el=$(id);if(!el)return;const old=el.value;el.innerHTML=`<option value="">${label}</option>`+[...new Set(values.filter(v=>v!==null&&v!==undefined&&v!=='').map(String))].sort((a,b)=>a.localeCompare(b,'pt-BR',{numeric:true})).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');el.value=old}
+function commissionSource(){return visibleSales()}
+function commissionFiltered(){const all=commissionSource();const val=id=>$(id)?.value||'';return all.filter(x=>{const sellerName=db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'';const pdvName=db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'';const saleValue=String(Number(x.value||0).toFixed(2));const comm=String(Number(commissionForSale(x)||0).toFixed(2));return (!val('cDataVenda')||x.date===val('cDataVenda'))&&(!val('cDataInst')||x.installDate===val('cDataInst'))&&(!val('cMes')||(x.installDate||'').slice(5,7)===val('cMes'))&&(!val('cAno')||(x.installDate||'').slice(0,4)===val('cAno'))&&(!val('cVendedor')||sellerName===val('cVendedor'))&&(!val('cPDV')||pdvName===val('cPDV'))&&(!val('cOperadora')||x.operatorName===val('cOperadora'))&&(!val('cPlano')||x.planName===val('cPlano'))&&(!val('cStatus')||x.status===val('cStatus'))&&(!val('cValor')||saleValue===val('cValor'))&&(!val('cComissao')||comm===val('cComissao'));})}
+function commissionPeriodBase(){const now=new Date(),m=$('cMes')?.value||String(now.getMonth()+1).padStart(2,'0'),y=$('cAno')?.value||String(now.getFullYear());return commissionSource().filter(x=>(x.installDate||'').slice(0,4)===y&&(x.installDate||'').slice(5,7)===m)}
+function renderCommission(){const src=commissionSource();commissionFilterFill('cVendedor',db.sellers.filter(s=>src.some(x=>Number(x.sellerId)===Number(s.id))).map(s=>s.name),'Vendedor');commissionFilterFill('cPDV',db.pdvs.filter(p=>src.some(x=>Number(x.pdvId)===Number(p.id))).map(p=>p.name),'PDV');commissionFilterFill('cOperadora',src.map(x=>x.operatorName),'Operadora');commissionFilterFill('cPlano',src.map(x=>x.planName),'Plano');commissionFilterFill('cStatus',src.map(x=>x.status),'Status');commissionFilterFill('cValor',src.map(x=>Number(x.value||0).toFixed(2)),'Valor da venda');commissionFilterFill('cComissao',src.map(x=>Number(commissionForSale(x)||0).toFixed(2)),'Comissão');const years=[...new Set(src.map(x=>(x.installDate||'').slice(0,4)).filter(Boolean))].sort();const ym=$('cMes'),oy=ym.value;ym.innerHTML='<option value="">Mês da instalação</option>'+Array.from({length:12},(_,i)=>{const v=String(i+1).padStart(2,'0');return `<option value="${v}">${new Date(2000,i,1).toLocaleString('pt-BR',{month:'long'})}</option>`}).join('');ym.value=oy||String(new Date().getMonth()+1).padStart(2,'0');const ya=$('cAno'),oyv=ya.value;ya.innerHTML='<option value="">Ano da instalação</option>'+years.map(y=>`<option value="${y}">${y}</option>`).join('');ya.value=oyv||String(new Date().getFullYear());const rows=commissionFiltered();const base=commissionPeriodBase();const m=ym.value||String(new Date().getMonth()+1).padStart(2,'0'),y=ya.value||String(new Date().getFullYear());const pending=src.filter(x=>['Pendente','Pendente BKO','Vendido'].includes(x.status)&&(x.date||'').slice(0,4)===y&&(x.date||'').slice(5,7)===m);const canceled=src.filter(x=>x.status==='Cancelado'&&(x.date||'').slice(0,4)===y&&(x.date||'').slice(5,7)===m);const installed=base.filter(x=>x.status==='Instalado');let pm=Number(m)-1,py=Number(y);if(pm===0){pm=12;py--}const carry=installed.filter(x=>(x.date||'').slice(0,4)===String(py)&&(x.date||'').slice(5,7)===String(pm).padStart(2,'0'));$('cInstaladas').textContent=installed.length;$('cPendentes').textContent=pending.length;$('cCanceladas').textContent=canceled.length;$('cCarryover').textContent=carry.length;$('cReceber').textContent=money(installed.reduce((a,x)=>a+commissionForSale(x),0));$('commissionBody').innerHTML=rows.map(x=>{const sn=db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-',pn=db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-';return `<tr><td>${fmtDate(x.date)}</td><td>${fmtDate(x.installDate)}</td><td>${esc(x.name||'')}</td><td>${esc(x.cpf||'')}</td><td>${esc(sn)}</td><td>${esc(pn)}</td><td>${esc(x.operatorName||'')}</td><td>${esc(x.planName||'')}</td><td>${money(x.value)}</td><td>${money(commissionForSale(x))}</td><td>${badge(x.status)}</td></tr>`}).join('')||'<tr><td colspan="11">Nenhuma venda encontrada com os filtros selecionados.</td></tr>'}
+function clearCommissionFilters(){['cDataVenda','cDataInst','cMes','cAno','cVendedor','cPDV','cOperadora','cPlano','cStatus','cValor','cComissao'].forEach(id=>{if($(id))$(id).value=''});renderCommission()}
+function exportCommission(){const rows=commissionFiltered().map(x=>({DATA_VENDA:x.date||'',DATA_INSTALACAO:x.installDate||'',CLIENTE:x.name||'',CPF_CNPJ:x.cpf||'',VENDEDOR:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'',PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'',OPERADORA:x.operatorName||'',PLANO:x.planName||'',VALOR:Number(x.value||0),COMISSAO:Number(commissionForSale(x)||0),STATUS:x.status||''}));if(!rows.length)return alert('Não há vendas para exportar com os filtros selecionados.');openExportPassword(()=>downloadCsvRows(rows,'comissao_filtrada'))}
+
 function renderDashboard(){
   const a=dashboardSales();
   $('mVendas').textContent=a.length;
@@ -476,7 +785,10 @@ function renderDashboard(){
   const recent=[...a].sort((x,y)=>(y.createdAt||'').localeCompare(x.createdAt||'')).slice(0,8);
   $('recentSales').innerHTML=recent.length ? `<div class="table-wrap"><table class="table"><thead><tr><th>Data</th><th>Cliente</th><th>Plano</th><th>Valor</th><th>Status</th><th>Vendedor</th><th>PDV</th></tr></thead><tbody>${recent.map(x=>`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="muted">Nenhuma venda cadastrada.</p>';
 }
-function renderSales(){let a=visibleSales(),fd=$('fData').value,mes=$('fMes').value,ano=$('fAno').value,st=$('fStatus').value,v=$('fVendedor').value,p=$('fPDV').value,c=$('fContractId')?.value.trim()||'',ln=$('fLineNumber')?.value.trim()||'',pl=$('fPlano').value,op=$('fOperadora').value;a=a.filter(x=>(!fd||x.date===fd)&&(!mes||x.date?.slice(5,7)===mes)&&(!ano||x.date?.slice(0,4)===ano)&&(!st||x.status===st)&&(!v||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===v)&&(!p||db.pdvs.find(q=>Number(q.id)===Number(x.pdvId))?.name===p)&&(!c||String(x.contractId||'').toLowerCase().includes(c.toLowerCase()))&&(!ln||String(x.lineNumber||'').toLowerCase().includes(ln.toLowerCase()))&&(!pl||x.planName===pl)&&(!op||x.operatorName===op));$('salesBody').innerHTML=a.map(x=>`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.operatorName)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td class="actions">${canEditSale(x)?`<button class="btn btn-secondary" onclick="openSale(${x.id})">Editar</button>`:''}${canDeleteSale(x)?`<button class="btn btn-danger" onclick="deleteSale(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum registro encontrado.</td></tr>'}
+function searchNormalize(v){return String(v??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim()}
+function searchDigits(v){return String(v??'').replace(/\D/g,'')}
+function matchesClientSearch(x,q){if(!q)return true;const text=searchNormalize([x.cpf,x.name,x.phone,...(x.phones||[]),x.protocol,x.id_contrato,x.numero_linha,x.contractId,x.lineNumber].filter(Boolean).join(' '));const digits=searchDigits([x.cpf,x.phone,...(x.phones||[]),x.protocol,x.id_contrato,x.numero_linha,x.contractId,x.lineNumber].filter(Boolean).join(' '));const nq=searchNormalize(q),nd=searchDigits(q);return text.includes(nq)||(nd&&digits.includes(nd))}
+function renderSales(){let a=visibleSales(),fd=$('fData').value,mes=$('fMes').value,ano=$('fAno').value,st=$('fStatus').value,v=$('fVendedor').value,p=$('fPDV').value,q=$('fBusca')?.value.trim()||'',c=$('fContractId')?.value.trim()||'',ln=$('fLineNumber')?.value.trim()||'',pl=$('fPlano').value,op=$('fOperadora').value;a=a.filter(x=>(!q||matchesClientSearch(x,q))&&(!fd||x.date===fd)&&(!mes||x.date?.slice(5,7)===mes)&&(!ano||x.date?.slice(0,4)===ano)&&(!st||x.status===st)&&(!v||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===v)&&(!p||db.pdvs.find(q=>Number(q.id)===Number(x.pdvId))?.name===p)&&(!c||String(x.contractId||'').toLowerCase().includes(c.toLowerCase()))&&(!ln||String(x.lineNumber||'').toLowerCase().includes(ln.toLowerCase()))&&(!pl||x.planName===pl)&&(!op||x.operatorName===op));$('salesBody').innerHTML=a.map(x=>`<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.operatorName)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td class="actions">${canEditSale(x)?`<button class="btn btn-secondary" onclick="openSale(${x.id})">Editar</button>`:''}${canDeleteSale(x)?`<button class="btn btn-danger" onclick="deleteSale(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum registro encontrado.</td></tr>'}
 function canEditSale(x){if(isAdmin())return true;if(current.role==='bko'||isSupervisor())return Number(x.pdvId)===Number(seller()?.pdvId);return Number(x.sellerId)===Number(current.sellerId)}
 function canDeleteSale(){return isAdmin()}
 
@@ -493,8 +805,8 @@ function openSale(id){
   $('modalTitle').textContent=x?'Editar venda':'Cadastrar venda';
   $('modalBody').innerHTML=`<div class="grid">
   <div class="form-group"><label>Nome *</label><input id="sName" value="${esc(x?.name||'')}"></div>
-  <div class="form-group"><label>Telefone(s)</label><input id="sPhone" value="${esc((x?.phones||[]).join(', '))}" placeholder="Separe por vírgula"></div>
-  <div class="form-group"><label>E-mail(s)</label><input id="sEmail" value="${esc((x?.emails||[]).join(', '))}" placeholder="Separe por vírgula"></div>
+  <div class="form-group"><label>Telefone(s)</label><input id="sPhone" value="${esc((x?.phones||[]).join(', '))}" placeholder="Ex.: (31) 99999-9999"><small class="muted">Informe um ou mais telefones; se houver mais de um, separe por vírgula.</small></div>
+  <div class="form-group"><label>E-mail(s)</label><input id="sEmail" value="${esc((x?.emails||[]).join(', '))}" placeholder="cliente@email.com"><small class="muted">Opcional. Separe vários endereços por vírgula.</small></div>
   <div class="form-group">
     <label>Documento *</label>
     <div class="doc-group">
@@ -505,8 +817,8 @@ function openSale(id){
       <input id="sCpf" value="${esc(x?.cpf||'')}">
     </div>
   </div>
-  <div class="form-group"><label>Data nascimento</label><input id="sBirth" type="date" value="${esc(x?.birthDate||'')}"></div>
-  <div class="form-group"><label>Nome da mãe</label><input id="sMother" value="${esc(x?.motherName||'')}"></div>
+  <div class="form-group"><label>Data nascimento</label><input id="sBirth" type="date" value="${esc(x?.birthDate||'')}"><small class="muted">Opcional; informe quando solicitado pela operadora.</small></div>
+  <div class="form-group"><label>Nome da mãe</label><input id="sMother" value="${esc(x?.motherName||'')}"><small class="muted">Opcional; preencha o nome completo se exigido.</small></div>
   <div class="form-group">
     <label>CEP *</label>
     <div class="input-with-btn">
@@ -534,20 +846,20 @@ function openSale(id){
    <div class="form-group"><label>Bairro *</label><input id="iBairro" value="${esc(x?.installAddress?.district||'')}"></div><div class="form-group"><label>Cidade *</label><input id="iCity" value="${esc(x?.installAddress?.city||'')}"></div>
    <div class="form-group"><label>Estado *</label><input id="iUf" maxlength="2" value="${esc(x?.installAddress?.uf||'')}"></div></div></div></div>
   <div class="form-group"><label>Operadora vendida *</label><select id="sOp" onchange="updatePlans()"><option value="">Selecione</option>${ops}</select></div>
-  <div class="form-group"><label>Plano vendido *</label><select id="sPlan"></select></div><div class="form-group"><label>Valor</label><input id="sValue" readonly></div><div class="form-group"><label>Comissão do produto</label><input id="sCommission" readonly></div>
-  <div class="form-group"><label>Data da venda</label><input id="sDate" type="date" value="${x?.date||today()}" ${x?'readonly':''}></div><div class="form-group"><label>Data prevista de instalação</label><input id="sInstall" type="date" value="${x?.installDate||''}"></div>
+  <div class="form-group"><label>Plano vendido *</label><select id="sPlan"></select></div><div class="form-group"><label>Valor de venda</label><input id="sValue" type="number" step="0.01" ${isAdmin() ? "" : "readonly"}></div><div class="form-group"><label>Comissão da venda</label><input id="sCommission" type="number" step="0.01" ${isAdmin()?"":"readonly"}></div>${isAdmin()?`<div class="form-group"><label>Valor que vou receber</label><input id="sReceiveValue" type="number" step="0.01"></div><div class="form-group"><label>Comissão que vou receber</label><input id="sReceiveCommission" type="number" step="0.01"></div>`:''}
+  <div class="form-group"><label>Data da venda</label><input id="sDate" type="date" value="${x?.date||today()}" ${x&&!isAdmin()?'readonly':''}></div><div class="form-group"><label>Data prevista de instalação</label><input id="sInstall" type="date" value="${x?.installDate||''}"></div>
   <div class="form-group"><label>Status</label><select id="sStatus" ${(!x||current.role==='usuario')?'disabled':''}><option>Vendido</option><option>Instalado</option><option>Pendente</option><option>Pendente BKO</option><option>Cancelado</option></select></div>
   <div class="form-group"><label>ID contrato</label><input id="sContractId" value="${esc(x?.contractId||'')}"></div>
   <div class="form-group"><label>Número da linha</label><input id="sLineNumber" value="${esc(x?.lineNumber||'')}"></div>
   <div class="form-group"><label>Vendedor</label><select id="sSeller" ${current.role==='usuario'?'disabled':''}>${db.sellers.map(s=>`<option value="${s.id}" ${Number(currentSellerId)===Number(s.id)?'selected':''}>${esc(s.name)}</option>`).join('')}</select></div>
   <div class="form-group"><label>PDV</label><select id="sPdv" ${current.role==='usuario'?'disabled':''}>${db.pdvs.map(p=>`<option value="${p.id}" ${Number(currentPdvId)===Number(p.id)?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
-  <div class="form-group full"><label>Observação</label><textarea id="sObs">${esc(x?.obs||'')}</textarea></div></div>
+  <div class="form-group full"><label>Observação</label><textarea id="sObs" placeholder="Informações adicionais sobre a venda">${esc(x?.obs||'')}</textarea><small class="muted">Registre detalhes relevantes que não tenham campo próprio.</small></div></div>
   <div style="text-align:right;margin-top:15px"><button class="btn btn-primary" onclick="saveSale(${id||0})">Salvar venda</button></div>`;
-  $('sStatus').value=x?.status||'Vendido';$('sDiffInstall').value=String(!!x?.differentInstallAddress);toggleSaleInstallAddress();updatePlans(x?.planId);setupCPFField($('sCpf'), 'sDocType');$('modal').classList.remove('hidden');
+  $('sStatus').value=x?.status||'Vendido';$('sDiffInstall').value=String(!!x?.differentInstallAddress);$('sValue').dataset.manual=x?'1':'';$('sCommission').dataset.manual=x?'1':'';toggleSaleInstallAddress();updatePlans(x?.planId);if(x){$('sValue').value=Number(x.value||0).toFixed(2);$('sCommission').value=Number(x.commission||0).toFixed(2);if($('sReceiveValue'))$('sReceiveValue').value=Number(x.receiveValue||0).toFixed(2);if($('sReceiveCommission'))$('sReceiveCommission').value=Number(x.receiveCommission||0).toFixed(2)}setupCPFField($('sCpf'), 'sDocType');$('modal').classList.remove('hidden');
 }
 function toggleSaleInstallAddress(){$('saleInstallAddressBox')?.classList.toggle('hidden',$('sDiffInstall')?.value!=='true')}
-function updatePlans(selected){const opId=Number($('sOp').value),plans=db.plans.filter(p=>Number(p.operatorId)===opId),sel=$('sPlan');sel.innerHTML='<option value="">Selecione</option>'+plans.map(p=>`<option value="${p.id}" ${Number(selected)===Number(p.id)?'selected':''}>${esc(p.name)}</option>`).join('');if(plans.length&&!selected)sel.value=plans[0].id;updateValue()}
-function updateValue(){const pl=db.plans.find(p=>Number(p.id)===Number($('sPlan')?.value));if($('sValue'))$('sValue').value=money(pl?.value||0);if($('sCommission'))$('sCommission').value=money(pl?.commission||0)}
+function updatePlans(selected){const opId=Number($('sOp').value),sel=$('sPlan');const plans=db.plans.filter(p=>Number(p.operatorId)===opId && (p.active || Number(selected)===Number(p.id)));sel.innerHTML='<option value="">Selecione</option>'+plans.map(p=>`<option value="${p.id}" ${Number(selected)===Number(p.id)?'selected':''}>${esc(p.name)}${!p.active?' (Inativo)':''}</option>`).join('');if(plans.length&&!selected)sel.value=plans[0].id;updateValue()}
+function updateValue(){const pl=db.plans.find(p=>Number(p.id)===Number($('sPlan')?.value));if(!pl)return;if($('sValue')&&!$('sValue').dataset.manual)$('sValue').value=Number(pl.value||0).toFixed(2);if($('sCommission')&&!$('sCommission').dataset.manual)$('sCommission').value=money(pl.commission||0);if($('sReceiveValue'))$('sReceiveValue').value=Number(pl.receiveValue||0).toFixed(2);if($('sReceiveCommission'))$('sReceiveCommission').value=Number(pl.receiveCommission||0).toFixed(2)}
 document.addEventListener('change',e=>{if(e.target.id==='sPlan'||e.target.id==='sOp')updateValue()});
 document.addEventListener('focusin',e=>{if(/cpf/i.test(e.target.id||''))setupCPFField(e.target, $('sDocType') ? 'sDocType' : null)});
 
@@ -566,11 +878,11 @@ async function saveSale(id){
 
   if(!sellerId) return alert('Selecione um vendedor válido cadastrado no sistema.');
 
-  const payload={name:$('sName').value.trim(),cpf:$('sCpf').value,birth_date:$('sBirth').value||null,mother_name:$('sMother').value.trim(),id_contrato:$('sContractId').value.trim(),numero_linha:$('sLineNumber').value.trim(),street:$('sRua').value,number:$('sNum').value,complement:$('sComp').value,district:$('sBairro').value,city:$('sCity').value,cep:$('sCep').value,uf:$('sUf').value.toUpperCase(),phones:$('sPhone').value.split(',').map(x=>x.trim()).filter(Boolean),emails:$('sEmail').value.split(',').map(x=>x.trim()).filter(Boolean),different_install_address:differentInstallAddress,install_cep:differentInstallAddress?$('iCep').value:null,install_street:differentInstallAddress?$('iRua').value:null,install_number:differentInstallAddress?$('iNum').value:null,install_complement:differentInstallAddress?$('iComp').value:null,install_district:differentInstallAddress?$('iBairro').value:null,install_city:differentInstallAddress?$('iCity').value:null,install_uf:differentInstallAddress?$('iUf').value.toUpperCase():null,operator_id:op.id,operator_name:op.name,plan_id:pl.id,plan_name:pl.name,value:Number(pl.value||0),commission:Number(pl.commission||0),sale_date:$('sDate').value||today(),install_date:$('sInstall').value||null,status:$('sStatus').value,seller_id:sellerId,pdv_id:pdvId,observation:$('sObs').value};
-  const q=id?sb.from('sales').update(payload).eq('id',id).select().single():sb.from('sales').insert(payload).select().single();const {error}=await q;if(error)throw error;closeModal();await loadDB();refresh();
+  const payload={name:$('sName').value.trim(),cpf:$('sCpf').value,birth_date:$('sBirth').value||null,mother_name:$('sMother').value.trim(),id_contrato:$('sContractId').value.trim(),numero_linha:$('sLineNumber').value.trim(),street:$('sRua').value,number:$('sNum').value,complement:$('sComp').value,district:$('sBairro').value,city:$('sCity').value,cep:$('sCep').value,uf:$('sUf').value.toUpperCase(),phones:$('sPhone').value.split(',').map(x=>x.trim()).filter(Boolean),emails:$('sEmail').value.split(',').map(x=>x.trim()).filter(Boolean),different_install_address:differentInstallAddress,install_cep:differentInstallAddress?$('iCep').value:null,install_street:differentInstallAddress?$('iRua').value:null,install_number:differentInstallAddress?$('iNum').value:null,install_complement:differentInstallAddress?$('iComp').value:null,install_district:differentInstallAddress?$('iBairro').value:null,install_city:differentInstallAddress?$('iCity').value:null,install_uf:differentInstallAddress?$('iUf').value.toUpperCase():null,operator_id:op.id,operator_name:op.name,plan_id:pl.id,plan_name:pl.name,value:(isAdmin() ? Number($('sValue').value||0) : (id ? Number(old?.value||0) : Number(pl.value||0))),commission:(isAdmin() ? Number($('sCommission').value||0) : (id ? Number(old?.commission||0) : Number(pl.commission||0))),receive_value:(isAdmin() ? Number($('sReceiveValue')?.value||0) : (id ? Number(old?.receiveValue||0) : Number(pl.receiveValue||0))),receive_commission:(isAdmin() ? Number($('sReceiveCommission')?.value||0) : (id ? Number(old?.receiveCommission||0) : Number(pl.receiveCommission||0))),sale_date:$('sDate').value||today(),install_date:$('sInstall').value||null,status:$('sStatus').value,seller_id:sellerId,pdv_id:pdvId,observation:$('sObs').value};
+  const q=id?sb.from('sales').update(payload).eq('id',id).select().single():sb.from('sales').insert(payload).select().single();const {error}=await q;if(error)throw error;closeModal();await reloadAllData();
  }catch(e){fail(e)}
 }
-async function deleteSale(id){if(!isAdmin())return alert('Somente o admin pode excluir vendas.');if(confirm('Excluir esta venda?')){const {error}=await sb.from('sales').delete().eq('id',id);if(error)return fail(error);await loadDB();refresh()}}
+async function deleteSale(id){if(!isAdmin())return alert('Somente o admin pode excluir vendas.');if(confirm('Excluir esta venda?')){const {error}=await sb.from('sales').delete().eq('id',id);if(error)return fail(error);await reloadAllData()}}
 
 function openAttendance(id){const x=id?db.attendances.find(a=>Number(a.id)===Number(id)):null;if(x&&!canEditAtt(x))return alert('Sem permissão.');$('modalTitle').textContent=x?'Editar atendimento':'Novo atendimento';
 const isCnpj = docDigits(x?.cpf).length > 11;
@@ -585,19 +897,108 @@ $('modalBody').innerHTML=`<div class="grid"><div class="form-group"><label>Nome 
     <input id="aCpf" value="${esc(x?.cpf||'')}">
   </div>
 </div>
-<div class="form-group"><label>Telefone</label><input id="aPhone" value="${esc(x?.phone||'')}"></div><div class="form-group"><label>Motivo</label><select id="aReason">${db.attendanceConfig.reasons.map(r=>`<option ${x?.reason===r?'selected':''}>${esc(r)}</option>`).join('')}</select></div><div class="form-group"><label>Status</label><select id="aStatus">${db.attendanceConfig.statuses.map(r=>`<option ${x?.status===r?'selected':''}>${esc(r)}</option>`).join('')}</select></div><div class="form-group full"><label>Observação</label><textarea id="aObs">${esc(x?.obs||'')}</textarea></div></div><div style="text-align:right"><button class="btn btn-primary" onclick="saveAttendance(${id||0})">Salvar</button></div>`;setupCPFField($('aCpf'),'aDocType');$('modal').classList.remove('hidden')}
-async function saveAttendance(id){try{const old=id?db.attendances.find(x=>Number(x.id)===Number(id)):null;if(old&&!canEditAtt(old))return alert('Sem permissão.');if(!id&&!$('aName').value.trim())return alert('Informe o nome.');if($('aCpf').value.trim() && !validateCPFField('aCpf', false, 'aDocType')) return;const payload={name:$('aName').value.trim(),cpf:$('aCpf').value,phone:$('aPhone').value,reason:$('aReason').value,status:$('aStatus').value,observation:$('aObs').value,seller_id:old?.sellerId||current.sellerId,pdv_id:old?.pdvId||seller()?.pdvId};const q=id?sb.from('attendances').update(payload).eq('id',id).select().single():sb.from('attendances').insert(payload).select().single();const {error}=await q;if(error)throw error;closeModal();await loadDB();refresh()}catch(e){fail(e)}}
+<div class="form-group"><label>Telefone</label><input id="aPhone" value="${esc(x?.phone||'')}"></div><div class="form-group"><label>Motivo</label><select id="aReason">${db.attendanceConfig.reasons.map(r=>`<option ${x?.reason===r?'selected':''}>${esc(r)}</option>`).join('')}</select></div><div class="form-group"><label>Status</label><select id="aStatus">${db.attendanceConfig.statuses.map(r=>`<option ${x?.status===r?'selected':''}>${esc(r)}</option>`).join('')}</select></div>${isAdmin()?`<div class="form-group"><label>Protocolo</label><input id="aProtocol" value="${esc(x?.protocol||'')}"></div><div class="form-group"><label>Data e hora</label><input id="aDate" type="datetime-local" value="${esc((x?.date||'').slice(0,16))}"></div><div class="form-group"><label>Vendedor</label><select id="aSeller">${db.sellers.map(v=>`<option value="${v.id}" ${Number(x?.sellerId||current?.sellerId)===Number(v.id)?'selected':''}>${esc(v.name)}</option>`).join('')}</select></div><div class="form-group"><label>PDV</label><select id="aPdv">${db.pdvs.map(v=>`<option value="${v.id}" ${Number(x?.pdvId||seller()?.pdvId)===Number(v.id)?'selected':''}>${esc(v.name)}</option>`).join('')}</select></div><div class="form-group"><label>Valor</label><input id="aValue" type="number" step="0.01" value="${esc(x?.value??0)}"></div><div class="form-group"><label>Comissão</label><input id="aCommission" type="number" step="0.01" value="${esc(x?.commission??0)}"></div><div class="form-group"><label>Valor a receber</label><input id="aReceiveValue" type="number" step="0.01" value="${esc(x?.receiveValue??0)}"></div><div class="form-group"><label>Comissão a receber</label><input id="aReceiveCommission" type="number" step="0.01" value="${esc(x?.receiveCommission??0)}"></div>`:''}<div class="form-group full"><label>Observação</label><textarea id="aObs">${esc(x?.obs||'')}</textarea></div></div><div style="text-align:right"><button class="btn btn-primary" onclick="saveAttendance(${id||0})">Salvar</button></div>`;setupCPFField($('aCpf'),'aDocType');$('modal').classList.remove('hidden')}
+async function saveAttendance(id){try{const old=id?db.attendances.find(x=>Number(x.id)===Number(id)):null;if(old&&!canEditAtt(old))return alert('Sem permissão.');if(!id&&!$('aName').value.trim())return alert('Informe o nome.');if($('aCpf').value.trim() && !validateCPFField('aCpf', false, 'aDocType')) return;const payload={name:$('aName').value.trim(),cpf:$('aCpf').value,phone:$('aPhone').value,reason:$('aReason').value,status:$('aStatus').value,observation:$('aObs').value,seller_id:isAdmin()?(Number($('aSeller')?.value)||old?.sellerId||current.sellerId):(old?.sellerId||current.sellerId),pdv_id:isAdmin()?(Number($('aPdv')?.value)||old?.pdvId||seller()?.pdvId):(old?.pdvId||seller()?.pdvId)};if(isAdmin()){payload.protocol=$('aProtocol')?.value.trim()||old?.protocol||null;payload.attendance_date=$('aDate')?.value?new Date($('aDate').value).toISOString():old?.date||new Date().toISOString();payload.value=Number($('aValue')?.value||0);payload.commission=Number($('aCommission')?.value||0);payload.receive_value=Number($('aReceiveValue')?.value||0);payload.receive_commission=Number($('aReceiveCommission')?.value||0);}const q=id?sb.from('attendances').update(payload).eq('id',id).select().single():sb.from('attendances').insert(payload).select().single();const {error}=await q;if(error)throw error;closeModal();await reloadAllData()}catch(e){fail(e)}}
 function canEditAtt(x){return isAdmin()||(isSupervisor()||current.role==='bko')&&Number(x.pdvId)===Number(seller()?.pdvId)||Number(x.sellerId)===Number(current.sellerId)}
-function renderAttendances(){let a=visibleAtt(),q=($('searchProtocol').value||'').toLowerCase(),st=$('attStatus').value,pdv=$('attPDV')?.value||'';a=a.filter(x=>(!q||[x.protocol,x.name,x.cpf].join(' ').toLowerCase().includes(q))&&(!st||x.status===st)&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv));$('attBody').innerHTML=a.map(x=>`<tr><td>${esc(x.protocol)}</td><td>${new Date(x.date).toLocaleString('pt-BR')}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.phone)}</td><td>${esc(x.reason)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td class="actions">${canEditAtt(x)?`<button class="btn btn-secondary" onclick="openAttendance(${x.id})">Editar</button>`:''}${isAdmin()?`<button class="btn btn-danger" onclick="deleteAtt(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum atendimento encontrado.</td></tr>'}
-async function deleteAtt(id){if(!isAdmin())return alert('Somente o admin pode excluir atendimentos.');if(confirm('Excluir atendimento?')){const {error}=await sb.from('attendances').delete().eq('id',id);if(error)return fail(error);await loadDB();refresh()}}
+function renderAttendances(){let a=visibleAtt(),q=($('searchProtocol').value||'').toLowerCase(),st=$('attStatus').value,pdv=$('attPDV')?.value||'',mes=$('attMes')?.value||'',ano=$('attAno')?.value||'';a=a.filter(x=>(!q||[x.protocol,x.name,x.cpf].join(' ').toLowerCase().includes(q))&&(!st||x.status===st)&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv)&&(!mes||(x.date||'').slice(5,7)===mes)&&(!ano||(x.date||'').slice(0,4)===ano));$('attBody').innerHTML=a.map(x=>`<tr><td>${esc(x.protocol)}</td><td>${new Date(x.date).toLocaleString('pt-BR')}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.phone)}</td><td>${esc(x.reason)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td class="actions">${canEditAtt(x)?`<button class="btn btn-secondary" onclick="openAttendance(${x.id})">Editar</button>`:''}${isAdmin()?`<button class="btn btn-danger" onclick="deleteAtt(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum atendimento encontrado.</td></tr>'}
+async function deleteAtt(id){if(!isAdmin())return alert('Somente o admin pode excluir atendimentos.');if(confirm('Excluir atendimento?')){const {error}=await sb.from('attendances').delete().eq('id',id);if(error)return fail(error);await reloadAllData()}}
 function openReopen(){$('modalTitle').textContent='Reabrir atendimento';$('modalBody').innerHTML='<div class="form-group"><label>Protocolo</label><input id="rProtocol"></div><div class="form-group"><label>Senha</label><input id="rPass" type="password"></div><button class="btn btn-primary" onclick="reopen()">Buscar e reabrir</button>';$('modal').classList.remove('hidden')}
 async function reopen(){try{const protocol=$('rProtocol').value.trim();const {data,error}=await sb.from('attendances').select('*').eq('protocol',protocol).maybeSingle();if(error)throw error;if(!data)return alert('Protocolo não encontrado.');return alert('A validação da senha de reabertura deve ser configurada como RPC/Edge Function no Supabase antes de habilitar esta operação.')}catch(e){fail(e)}}
 
-function reportSalesFiltered(){let a=visibleSales();const fd=$('rData')?.value||'',mes=$('rMes')?.value||'',ano=$('rAno')?.value||'',v=$('rVendedor')?.value||'',p=$('rPDV')?.value||'',op=$('rOperadora')?.value||'',pl=$('rPlano')?.value||'',st=$('rStatus')?.value||'';return a.filter(x=>(!fd||x.date===fd)&&(!mes||x.date?.slice(5,7)===mes)&&(!ano||x.date?.slice(0,4)===ano)&&(!v||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===v)&&(!p||db.pdvs.find(q=>Number(q.id)===Number(x.pdvId))?.name===p)&&(!op||x.operatorName===op)&&(!pl||x.planName===pl)&&(!st||x.status===st))}
+function reportSalesFiltered(){let a=visibleSales();const q=$('rBusca')?.value.trim()||'',fd=$('rData')?.value||'',mes=$('rMes')?.value||'',ano=$('rAno')?.value||'',v=$('rVendedor')?.value||'',p=$('rPDV')?.value||'',op=$('rOperadora')?.value||'',pl=$('rPlano')?.value||'',st=$('rStatus')?.value||'';return a.filter(x=>(!q||matchesClientSearch(x,q))&&(!fd||x.date===fd)&&(!mes||x.date?.slice(5,7)===mes)&&(!ano||x.date?.slice(0,4)===ano)&&(!v||db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name===v)&&(!p||db.pdvs.find(q=>Number(q.id)===Number(x.pdvId))?.name===p)&&(!op||x.operatorName===op)&&(!pl||x.planName===pl)&&(!st||x.status===st))}
 function renderReportFilters(){const a=visibleSales(),fill=(id,vals,label)=>{const e=$(id),old=e.value;e.innerHTML=`<option value="">${label}</option>`;[...new Set(vals.filter(Boolean))].sort().forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;e.appendChild(o)});e.value=old};fill('rVendedor',a.map(x=>db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name),'Vendedor');fill('rPDV',a.map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name),'PDV');fill('rOperadora',a.map(x=>x.operatorName),'Operadora');fill('rPlano',a.map(x=>x.planName),'Plano');const y=$('rAno'),oy=y.value,ys=[...new Set(a.map(x=>x.date?.slice(0,4)).filter(Boolean))].sort();y.innerHTML='<option value="">Ano</option>';ys.forEach(v=>y.innerHTML+=`<option value="${v}">${v}</option>`);y.value=oy;const m=$('rMes'),om=m.value;m.innerHTML='<option value="">Mês</option>';for(let i=1;i<=12;i++){const n=String(i).padStart(2,'0');m.innerHTML+=`<option value="${n}">${new Date(2000,i-1,1).toLocaleString('pt-BR',{month:'long'})}</option>`}m.value=om}
-function renderReports(){renderReportFilters();const a=reportSalesFiltered();$('rVendas').textContent=a.length;$('rValor').textContent=money(a.reduce((s,x)=>s+Number(x.value||0),0));$('reportSalesBody').innerHTML=a.map(x=>{const sellerName=db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-',pdv=db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-',addr=[x.street,x.number,x.complement,x.district,x.city,x.uf,x.cep].filter(Boolean).join(', ');return `<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc((x.phones||[]).join(', '))}</td><td>${esc(x.operatorName)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${money(commissionForSale(x))}</td><td>${fmtDate(x.installDate)}</td><td>${badge(x.status)}</td><td>${esc(sellerName)}</td><td>${esc(pdv)}</td><td>${esc(addr)}</td><td>${esc(x.obs||'')}</td></tr>`}).join('')||'<tr><td colspan="14">Nenhuma venda encontrada.</td></tr>';const at=visibleAtt();$('reportAttBody').innerHTML=at.map(x=>`<tr><td>${esc(x.protocol)}</td><td>${new Date(x.date).toLocaleString('pt-BR')}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.phone)}</td><td>${esc(x.reason)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td>${esc(x.obs||'')}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum atendimento encontrado.</td></tr>'}
-function clearReportFilters(){['rData','rMes','rAno','rVendedor','rPDV','rOperadora','rPlano','rStatus'].forEach(id=>$(id).value='');renderReports()}
-function exportCSV(type){if(!canAll())return alert('Apenas admin e supervisor podem exportar.');const rows=type==='sales'?reportSalesFiltered().map(x=>({Data:x.date,Cliente:x.name,"CPF/CNPJ":x.cpf,Telefone:(x.phones||[]).join(', '),Email:(x.emails||[]).join(', '),Rua:x.street,Número:x.number,Complemento:x.complement,Bairro:x.district,Cidade:x.city,UF:x.uf,CEP:x.cep,Operadora:x.operatorName,Plano:x.planName,Valor:x.value,Comissão:commissionForSale(x),Instalação:x.installDate,Status:x.status,Vendedor:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name,PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name,Observação:x.obs})):visibleAtt().map(x=>({Protocolo:x.protocol,DataHora:x.date,Cliente:x.name,"CPF/CNPJ":x.cpf,Telefone:x.phone,Motivo:x.reason,Status:x.status,Vendedor:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name,PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name,Observação:x.obs}));if(!rows.length)return alert('Não há registros para exportar.');const keys=Object.keys(rows[0]),csv='\ufeff'+[keys.join(';'),...rows.map(r=>keys.map(k=>`"${String(r[k]??'').replaceAll('"','""')}"`).join(';'))].join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=type+'_'+today()+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function reportAttendanceFiltered(){
+  let a=visibleAtt(),q=($('raBusca')?.value||'').toLowerCase(),st=$('raStatus')?.value||'',pdv=$('raPDV')?.value||'',mes=$('raMes')?.value||'',ano=$('raAno')?.value||'';
+  return a.filter(x=>(!q||[x.protocol,x.name,x.cpf,x.phone].join(' ').toLowerCase().includes(q))&&(!st||x.status===st)&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv)&&(!mes||(x.date||'').slice(5,7)===mes)&&(!ano||(x.date||'').slice(0,4)===ano));
+}
+function fillReportAttendanceFilters(){
+  const status=$('raStatus'),pdv=$('raPDV'),mes=$('raMes'),ano=$('raAno'); if(!status||!pdv)return;
+  const os=status.value,op=pdv.value,om=mes?.value||'',oy=ano?.value||'';
+  status.innerHTML='<option value="">Status</option>'+[...new Set(visibleAtt().map(x=>x.status).filter(Boolean))].sort().map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join(''); status.value=os;
+  pdv.innerHTML='<option value="">PDV</option>'+[...new Set(visibleAtt().map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name).filter(Boolean))].sort().map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join(''); pdv.value=op;
+  if(mes){mes.innerHTML='<option value="">Mês</option>';for(let i=1;i<=12;i++){const n=String(i).padStart(2,'0');mes.innerHTML+=`<option value="${n}">${new Date(2000,i-1,1).toLocaleString('pt-BR',{month:'long'})}</option>`}mes.value=om}
+  if(ano){const ys=[...new Set(visibleAtt().map(x=>(x.date||'').slice(0,4)).filter(Boolean))].sort();ano.innerHTML='<option value="">Ano</option>'+ys.map(v=>`<option value="${v}">${v}</option>`).join('');ano.value=oy}
+}
+function renderReports(){
+  renderReportFilters(); fillReportAttendanceFilters();
+  const a=reportSalesFiltered();
+  $('rVendas').textContent=a.length;$('rValor').textContent=money(a.reduce((s,x)=>s+Number(x.value||0),0));
+  $('reportSalesBody').innerHTML=a.map(x=>{const sellerName=db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-',pdv=db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-',addr=[x.installAddress?.street,x.installAddress?.number,x.installAddress?.complement,x.installAddress?.district,x.installAddress?.city,x.installAddress?.uf,x.installAddress?.cep].filter(Boolean).join(', ');return `<tr><td>${fmtDate(x.date)}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc((x.phones||[]).join(', '))}</td><td>${esc(x.operatorName)}</td><td>${esc(x.planName)}</td><td>${money(x.value)}</td><td>${money(commissionForSale(x))}</td>${isAdmin()?`<td>${money(x.receiveValue)}</td><td>${money(x.receiveCommission)}</td>`:''}<td>${fmtDate(x.installDate)}</td><td>${badge(x.status)}</td><td>${esc(sellerName)}</td><td>${esc(pdv)}</td><td>${esc(addr)}</td><td>${esc(x.obs||'')}</td></tr>`}).join('')||`<tr><td colspan="${isAdmin()?16:14}">Nenhuma venda encontrada.</td></tr>`;
+  const at=reportAttendanceFiltered();
+  $('reportAttBody').innerHTML=at.map(x=>`<tr><td>${esc(x.protocol)}</td><td>${new Date(x.date).toLocaleString('pt-BR')}</td><td>${esc(x.name)}</td><td>${esc(x.cpf)}</td><td>${esc(x.phone)}</td><td>${esc(x.reason)}</td><td>${badge(x.status)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td>${esc(x.obs||'')}</td></tr>`).join('')||'<tr><td colspan="10">Nenhum atendimento encontrado.</td></tr>';
+}
+
+function clearReportFilters(){['rBusca','rData','rMes','rAno','rVendedor','rPDV','rOperadora','rPlano','rStatus'].forEach(id=>$(id).value='');renderReports()}
+function clearReportAttendanceFilters(){['raBusca','raStatus','raPDV','raMes','raAno'].forEach(id=>{if($(id))$(id).value=''});renderReports()}
+function salesExportRows(){
+  return reportSalesFiltered().map(x=>{
+    const addr=x.installAddress||{};
+    const sellerName=db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'';
+    const pdvName=db.pdvs.find(s=>Number(s.id)===Number(x.pdvId))?.name||'';
+    return {
+      'DATA':x.date||'',
+      'CLIENTE':x.name||'',
+      'CPF/CNPJ':x.cpf||'',
+      'TELEFONES':(x.phones||[]).join(', '),
+      'E-MAILS':(x.emails||[]).join(', '),
+      'DATA DE NASCIMENTO':x.birthDate||'',
+      'NOME DA MÃE':x.motherName||'',
+      'CEP':x.cep||'',
+      'RUA':x.street||'',
+      'NÚMERO':x.number||'',
+      'COMPLEMENTO':x.complement||'',
+      'BAIRRO':x.district||'',
+      'CIDADE':x.city||'',
+      'UF':x.uf||'',
+      'ID CONTRATO':x.contractId||'',
+      'NÚMERO DA LINHA':x.lineNumber||'',
+      'OPERADORA':x.operatorName||'',
+      'PLANO':x.planName||'',
+      'VALOR DE VENDA':Number(x.value||0),
+      'COMISSÃO DA VENDA':Number(commissionForSale(x)||0),
+      ...(isAdmin()?{'VALOR QUE VOU RECEBER':Number(x.receiveValue||0),'COMISSÃO QUE VOU RECEBER':Number(x.receiveCommission||0)}:{}),
+      'DATA DE INSTALAÇÃO':x.installDate||'',
+      'CEP INSTALAÇÃO':addr.cep||'',
+      'RUA INSTALAÇÃO':addr.street||'',
+      'NÚMERO INSTALAÇÃO':addr.number||'',
+      'COMPLEMENTO INSTALAÇÃO':addr.complement||'',
+      'BAIRRO INSTALAÇÃO':addr.district||'',
+      'CIDADE INSTALAÇÃO':addr.city||'',
+      'UF INSTALAÇÃO':addr.uf||'',
+      'STATUS':x.status||'',
+      'VENDEDOR':sellerName,
+      'PDV':pdvName,
+      'OBSERVAÇÃO':x.obs||''
+    };
+  });
+}
+function attendanceExportRows(){
+  return reportAttendanceFiltered().map(x=>{
+    const sellerName=db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'';
+    const pdvName=db.pdvs.find(s=>Number(s.id)===Number(x.pdvId))?.name||'';
+    return {
+      'PROTOCOLO':x.protocol||'',
+      'DATA E HORA':x.date||'',
+      'CLIENTE':x.name||'',
+      'CPF/CNPJ':x.cpf||'',
+      'TELEFONE':x.phone||'',
+      'MOTIVO':x.reason||'',
+      'STATUS':x.status||'',
+      'VENDEDOR':sellerName,
+      'PDV':pdvName,
+      'VALOR DE VENDA':x.value??'',
+      'COMISSÃO DA VENDA':x.commission??'',
+      ...(isAdmin()?{'VALOR QUE VOU RECEBER':x.receiveValue??'','COMISSÃO QUE VOU RECEBER':x.receiveCommission??''}:{}),
+      'OBSERVAÇÃO':x.obs||''
+    };
+  });
+}
+function exportCSV(type){
+  if(!canAll())return alert('Apenas admin e supervisor podem exportar.');
+  const rows=type==='sales'?salesExportRows():attendanceExportRows();
+  if(!rows.length)return alert('Não há registros filtrados para exportar.');
+  openExportPassword(()=>downloadCsvRows(rows,type==='sales'?'vendas_filtradas':'atendimentos_filtrados'));
+}
 
 function renderHelpLinks(){
   const tbody = $('helpLinksBody');
@@ -619,7 +1020,7 @@ function manage(type){
 
 function systemModal(){$('modalTitle').textContent='Configuração do sistema';$('modalBody').innerHTML=`<div class="form-group"><label>Nome do sistema</label><input id="sysName" value="${esc(db.settings.name)}"></div><div class="form-group"><label>Senha de configuração</label><p class="muted">A senha de configuração não é mais armazenada no navegador. Controle o acesso pela role admin do Supabase.</p></div><div class="form-group"><label>Senha para reabrir atendimento</label><p class="muted">A validação deve ser feita no servidor por RPC/Edge Function.</p></div><div class="form-group"><label>Logo grande</label><input id="logoFile" type="file" accept="image/*" onchange="previewLogo(this)"><div><img id="logoPrev" class="logo-preview ${db.settings.logo?'':'hidden'}" src="${esc(db.settings.logo)}"></div></div><button class="btn btn-primary" onclick="saveSystem()">Salvar</button>`;$('modal').classList.remove('hidden')}
 function previewLogo(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('logoPrev').src=r.result;$('logoPrev').classList.remove('hidden');$('logoPrev').dataset.data=r.result};r.readAsDataURL(f)}
-async function saveSystem(){try{const patch={name:$('sysName').value||'Sistema de Vendas',logo_url:$('logoPrev').dataset.data||$('logoPrev').src||null,updated_at:new Date().toISOString()};const id=(await sb.from('app_settings').select('id').limit(1).single()).data?.id;if(!id)throw new Error('Configuração app_settings não encontrada. Execute o SQL primeiro.');const {error}=await sb.from('app_settings').update(patch).eq('id',id);if(error)throw error;closeModal();await loadDB();refresh()}catch(e){fail(e)}}
+async function saveSystem(){try{const patch={name:$('sysName').value||'Sistema de Vendas',logo_url:$('logoPrev').dataset.data||$('logoPrev').src||null,updated_at:new Date().toISOString()};const existing=await sb.from('app_settings').select('id').limit(1).maybeSingle();if(existing.error)throw existing.error;let error;if(existing.data?.id){({error}=await sb.from('app_settings').update(patch).eq('id',existing.data.id));}else{({error}=await sb.from('app_settings').insert(patch));}if(error)throw error;closeModal();await reloadAllData()}catch(e){fail(e,'Falha ao salvar configuração do sistema')}}
 
 function listManager(title,type,headers,row,extra=''){
   const arr = type==='operators'?db.operators:type==='users'?db.users:type==='helpLinks'?db.helpLinks:db[type]||[];
@@ -689,13 +1090,13 @@ async function editPdv(id){const x=id?db.pdvs.find(x=>Number(x.id)===Number(id))
 async function savePdv(id){try{const d={name:$('pName').value.trim()};if(!d.name)return alert('Informe o nome.');const q=id?sb.from('pdvs').update(d).eq('id',id):sb.from('pdvs').insert(d);const {error}=await q;if(error)throw error;await loadDB();pdvModal()}catch(e){fail(e)}}
 
 function operatorModal(){listManager('Operadoras','operators',['Operadora','Planos / Comissão'],x=>[esc(x.name),db.plans.filter(p=>Number(p.operatorId)===Number(x.id)).map(p=>`${esc(p.name)} (${money(p.value)} · comissão ${money(p.commission||0)})`).join('<br>')],'<button class="btn btn-primary" onclick="editOperator()">+ Adicionar</button>')}
-async function editOperator(id){const x=id?db.operators.find(x=>Number(x.id)===Number(id))||{}:{};const plans=id?db.plans.filter(p=>Number(p.operatorId)===Number(id)):[];$('modalTitle').textContent='Operadora';$('modalBody').innerHTML=`<div class="form-group"><label>Nome da operadora</label><input id="opName" value="${esc(x.name||'')}"></div><div id="planRows">${plans.map((p,i)=>planRow(p,i)).join('')}</div><button class="btn btn-secondary" onclick="addPlanRow()">+ Plano</button> <button class="btn btn-primary" onclick="saveOperator(${id||0})">Salvar</button>`;$('modal').classList.remove('hidden')}
-function planRow(p={},i=0){return `<div class="grid" style="margin:6px 0" data-plan-id="${p.id||''}"><input class="plName" placeholder="Nome do plano" value="${esc(p.name||'')}"><input class="plValue" type="number" step="0.01" placeholder="Valor" value="${p.value??''}"><input class="plCommission" type="number" step="0.01" placeholder="Comissão" value="${p.commission??''}"></div>`}
+async function editOperator(id){const x=id?db.operators.find(x=>Number(x.id)===Number(id))||{}:{};const plans=id?db.plans.filter(p=>Number(p.operatorId)===Number(id)):[];$('modalTitle').textContent='Operadora';$('modalBody').innerHTML=`<div class="form-group"><label>Nome da operadora</label><input id="opName" value="${esc(x.name||'')}" placeholder="Ex.: Claro"><small class="muted">Nome da operadora que será usado nos planos e filtros.</small></div><div id="planRows">${plans.map((p,i)=>planRow(p,i)).join('')}</div><button class="btn btn-secondary" onclick="addPlanRow()">+ Plano</button> <button class="btn btn-primary" onclick="saveOperator(${id||0})">Salvar</button>`;$('modal').classList.remove('hidden')}
+function planRow(p={},i=0){return `<div class="grid" style="margin:6px 0" data-plan-id="${p.id||''}"><div class="form-group"><label>Nome do plano</label><input class="plName" placeholder="Ex.: Controle 15 GB" value="${esc(p.name||'')}"><small class="muted">Nome comercial que aparecerá na venda.</small></div><div class="form-group"><label>Valor de venda</label><input class="plValue" type="number" step="0.01" placeholder="Ex.: 79,90" value="${p.value??''}" ${isAdmin()?'':'disabled'}><small class="muted">Preço cobrado do cliente, em reais. Alteração restrita ao administrador.</small></div><div class="form-group"><label>Comissão da venda</label><input class="plCommission" type="number" step="0.01" placeholder="Ex.: 20,00" value="${p.commission??''}"><small class="muted">Comissão gerada pela venda deste plano.</small></div><div class="form-group"><label>Valor que vou receber</label><input class="plReceiveValue" type="number" step="0.01" placeholder="Ex.: 70,00" value="${p.receiveValue??''}" ${isAdmin()?'':'disabled'}><small class="muted">Valor de repasse/líquido previsto para o vendedor.</small></div><div class="form-group"><label>Comissão que vou receber</label><input class="plReceiveCommission" type="number" step="0.01" placeholder="Ex.: 15,00" value="${p.receiveCommission??''}" ${isAdmin()?'':'disabled'}><small class="muted">Parte da comissão destinada ao vendedor.</small></div><label style="display:flex;align-items:center;gap:6px"><input class="plActive" type="checkbox" ${p.active!==false?'checked':''}> Ativo</label></div>`}
 function addPlanRow(){const e=document.createElement('div');e.innerHTML=planRow({},Date.now());$('planRows').appendChild(e.firstElementChild)}
-async function saveOperator(id){try{const name=$('opName').value.trim();if(!name)return alert('Informe o nome.');let operatorId=id;if(id){const {error}=await sb.from('operators').update({name}).eq('id',id);if(error)throw error}else{const {data,error}=await sb.from('operators').insert({name}).select().single();if(error)throw error;operatorId=data.id}const rows=[...document.querySelectorAll('#planRows .grid')];for(const r of rows){const pname=r.querySelector('.plName').value.trim();if(!pname)continue;const value=Number(r.querySelector('.plValue').value)||0,commission=Number(r.querySelector('.plCommission').value)||0,planId=Number(r.dataset.planId)||0;const payload={operator_id:operatorId,name:pname,value,commission,active:true};const q=planId?sb.from('plans').update(payload).eq('id',planId):sb.from('plans').insert(payload);const {error}=await q;if(error)throw error}await loadDB();operatorModal()}catch(e){fail(e)}}
+async function saveOperator(id){try{const name=$('opName').value.trim();if(!name)return alert('Informe o nome.');let operatorId=id;if(id){const {error}=await sb.from('operators').update({name}).eq('id',id);if(error)throw error}else{const {data,error}=await sb.from('operators').insert({name}).select().single();if(error)throw error;operatorId=data.id}const rows=[...document.querySelectorAll('#planRows .grid')];for(const r of rows){const pname=r.querySelector('.plName').value.trim();if(!pname)continue;const value=Number(r.querySelector('.plValue').value)||0,commission=Number(r.querySelector('.plCommission').value)||0,receiveValue=Number(r.querySelector('.plReceiveValue').value)||0,receiveCommission=Number(r.querySelector('.plReceiveCommission').value)||0,active=r.querySelector('.plActive')?.checked!==false,planId=Number(r.dataset.planId)||0;if(!isAdmin()&&planId){const existing=db.plans.find(p=>Number(p.id)===planId);if(existing&&value!==Number(existing.value||0))return alert('Somente o admin pode alterar o valor do plano.');}const payload={operator_id:operatorId,name:pname,value,commission,receive_value:receiveValue,receive_commission:receiveCommission,active};const q=planId?sb.from('plans').update(payload).eq('id',planId):sb.from('plans').insert(payload);const {error}=await q;if(error)throw error}await loadDB();operatorModal()}catch(e){fail(e)}}
 
 function attendanceConfigModal(){$('modalTitle').textContent='Configuração de atendimentos';$('modalBody').innerHTML=`<div class="form-group"><label>Motivos (um por linha)</label><textarea id="reasons">${esc(db.attendanceConfig.reasons.join('\n'))}</textarea></div><div class="form-group"><label>Status (um por linha)</label><textarea id="statuses">${esc(db.attendanceConfig.statuses.join('\n'))}</textarea></div><p class="muted">As listas são gravadas nas tabelas attendance_reasons e attendance_statuses.</p><button class="btn btn-primary" onclick="saveAttConfig()">Salvar</button>`;$('modal').classList.remove('hidden')}
-async function saveAttConfig(){try{const reasons=$('reasons').value.split('\n').map(x=>x.trim()).filter(Boolean),statuses=$('statuses').value.split('\n').map(x=>x.trim()).filter(Boolean);const oldR=await sb.from('attendance_reasons').select('id,name');if(oldR.error)throw oldR.error;const oldS=await sb.from('attendance_statuses').select('id,name');if(oldS.error)throw oldS.error;await sb.from('attendance_reasons').delete().not('id','is',null);await sb.from('attendance_statuses').delete().not('id','is',null);if(reasons.length){const {error}=await sb.from('attendance_reasons').insert(reasons.map(name=>({name,active:true})));if(error)throw error}if(statuses.length){const {error}=await sb.from('attendance_statuses').insert(statuses.map(name=>({name,active:true})));if(error)throw error}closeModal();await loadDB();refresh()}catch(e){fail(e)}}
+async function saveAttConfig(){try{const reasons=$('reasons').value.split('\n').map(x=>x.trim()).filter(Boolean),statuses=$('statuses').value.split('\n').map(x=>x.trim()).filter(Boolean);const oldR=await sb.from('attendance_reasons').select('id,name');if(oldR.error)throw oldR.error;const oldS=await sb.from('attendance_statuses').select('id,name');if(oldS.error)throw oldS.error;await sb.from('attendance_reasons').delete().not('id','is',null);await sb.from('attendance_statuses').delete().not('id','is',null);if(reasons.length){const {error}=await sb.from('attendance_reasons').insert(reasons.map(name=>({name,active:true})));if(error)throw error}if(statuses.length){const {error}=await sb.from('attendance_statuses').insert(statuses.map(name=>({name,active:true})));if(error)throw error}closeModal();await reloadAllData()}catch(e){fail(e)}}
 
 function manageHelpLinksModal(){
   listManager('Links de Ajuda', 'helpLinks', ['Descrição', 'Link'], x => [esc(x.title), `<a href="${esc(x.url)}" target="_blank" style="color:var(--primary);text-decoration:underline">${esc(x.url)}</a>`], '<button class="btn btn-primary" onclick="editHelpLink()">+ Adicionar Link</button>');
@@ -715,8 +1116,11 @@ async function editHelpLink(id){
 async function saveHelpLink(id){
   try {
     const title = $('hlTitle').value.trim();
-    const url = $('hlUrl').value.trim();
+    let url = $('hlUrl').value.trim();
     if(!title || !url) return alert('Preencha a descrição e o link.');
+    // URLs não diferenciam maiúsculas/minúsculas no domínio;
+    // mantemos o link inteiro em minúsculo para evitar erro nos links cadastrados.
+    url = url.toLowerCase();
     const payload = { title, url };
     const q = id ? sb.from('help_links').update(payload).eq('id', id) : sb.from('help_links').insert(payload);
     const { error } = await q;
@@ -759,13 +1163,14 @@ async function delManager(type,id){
 }
 
 function individualProductsModal(){listManager('Produtos Individuais','individualProducts',['Produto','Valor','Comissão','PDVs','Ativo'],x=>[esc(x.name),money(x.value),money(x.commission),esc((x.pdvIds||[]).map(id=>db.pdvs.find(p=>Number(p.id)===Number(id))?.name).filter(Boolean).join(', ')),x.active?'Sim':'Não'],'<button class="btn btn-primary" onclick="editIndividualProduct()">+ Adicionar Produto</button>')}
-async function editIndividualProduct(id){const x=id?db.individualProducts.find(v=>Number(v.id)===Number(id))||{}:{};$('modalTitle').textContent=id?'Editar Produto Individual':'Novo Produto Individual';$('modalBody').innerHTML=`<div class="grid"><div class="form-group"><label>Nome do produto *</label><input id="ipName" value="${esc(x.name||'')}"></div><div class="form-group"><label>Valor do produto *</label><input id="ipValueForm" type="number" step="0.01" value="${x.value??''}"></div><div class="form-group"><label>Valor da comissão *</label><input id="ipCommissionForm" type="number" step="0.01" value="${x.commission??''}"></div><div class="form-group"><label>Ativo</label><select id="ipActive"><option value="true">Sim</option><option value="false">Não</option></select></div><div class="form-group full"><label>PDVs onde aparecerá *</label><select id="ipPdvs" multiple size="6">${db.pdvs.map(p=>`<option value="${p.id}" ${(x.pdvIds||[]).map(Number).includes(Number(p.id))?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div></div><button class="btn btn-primary" onclick="saveIndividualProduct(${id||0})">Salvar</button>`;$('ipActive').value=String(x.active!==false);$('modal').classList.remove('hidden')}
+async function editIndividualProduct(id){const x=id?db.individualProducts.find(v=>Number(v.id)===Number(id))||{}:{};$('modalTitle').textContent=id?'Editar Produto Individual':'Novo Produto Individual';$('modalBody').innerHTML=`<div class="grid"><div class="form-group"><label>Nome do produto *</label><input id="ipName" value="${esc(x.name||'')}" placeholder="Ex.: Chip adicional"><small class="muted">Nome mostrado ao vendedor no lançamento.</small></div><div class="form-group"><label>Valor do produto *</label><input id="ipValueForm" type="number" step="0.01" value="${x.value??''}" placeholder="Ex.: 49,90"><small class="muted">Preço cobrado do cliente, em reais.</small></div><div class="form-group"><label>Valor da comissão *</label><input id="ipCommissionForm" type="number" step="0.01" value="${x.commission??''}" placeholder="Ex.: 10,00"><small class="muted">Comissão gerada por esta venda.</small></div><div class="form-group"><label>Ativo</label><select id="ipActive"><option value="true">Sim</option><option value="false">Não</option></select><small class="muted">Produtos inativos não devem ser oferecidos em novos lançamentos.</small></div><div class="form-group full"><label>PDVs onde aparecerá *</label><select id="ipPdvs" multiple size="6">${db.pdvs.map(p=>`<option value="${p.id}" ${(x.pdvIds||[]).map(Number).includes(Number(p.id))?'selected':''}>${esc(p.name)}</option>`).join('')}</select><small class="muted">Selecione os pontos de venda autorizados a comercializar este produto.</small></div></div><button class="btn btn-primary" onclick="saveIndividualProduct(${id||0})">Salvar</button>`;$('ipActive').value=String(x.active!==false);$('modal').classList.remove('hidden')}
 async function saveIndividualProduct(id){try{const name=$('ipName').value.trim().toUpperCase(),value=Number($('ipValueForm').value)||0,commission=Number($('ipCommissionForm').value)||0,pdvIds=[...$('ipPdvs').selectedOptions].map(o=>Number(o.value)),active=$('ipActive').value==='true';if(!name||!value||!pdvIds.length)return alert('PREENCHA PRODUTO, VALOR E PELO MENOS UM PDV.');const payload={name,value,commission,pdv_ids:pdvIds,active,updated_at:new Date().toISOString()};const q=id?sb.from('individual_products').update(payload).eq('id',id):sb.from('individual_products').insert(payload);const {error}=await q;if(error)throw error;await loadDB();individualProductsModal()}catch(e){fail(e)}}
 function visibleIndividualSales(){let a=db.individualSales;if(current?.role==='usuario')a=a.filter(x=>Number(x.sellerId)===Number(current.sellerId));if(current?.role==='bko'||current?.role==='supervisor')a=a.filter(x=>Number(x.pdvId)===Number(seller()?.pdvId));return a}
 function fillIndividualPdvFilter(){const e=$('ipPDV');if(!e)return;const old=e.value;e.innerHTML='<option value="">PDV</option>'+[...new Set(visibleIndividualSales().map(x=>db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name).filter(Boolean))].sort().map(n=>`<option>${esc(n)}</option>`).join('');e.value=old}
-function filteredIndividualSales(){const q=($('ipSearch')?.value||'').toUpperCase(),pdv=$('ipPDV')?.value||'',date=$('ipData')?.value||'';return visibleIndividualSales().filter(x=>(!q||[x.cpf,x.name,x.phone,x.productName].join(' ').toUpperCase().includes(q))&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv)&&(!date||x.saleDate===date))}
+function fillIndividualDateFilters(){const a=visibleIndividualSales(),m=$('ipMes'),y=$('ipAno');if(!m||!y)return;const om=m.value,oy=y.value;m.innerHTML='<option value="">Mês</option>';for(let i=1;i<=12;i++){const n=String(i).padStart(2,'0');m.innerHTML+=`<option value="${n}">${new Date(2000,i-1,1).toLocaleString('pt-BR',{month:'long'})}</option>`}m.value=om;const ys=[...new Set(a.map(x=>(x.saleDate||'').slice(0,4)).filter(Boolean))].sort();y.innerHTML='<option value="">Ano</option>'+ys.map(v=>`<option value="${v}">${v}</option>`).join('');y.value=oy}
+function filteredIndividualSales(){const q=($('ipSearch')?.value||'').toUpperCase(),pdv=$('ipPDV')?.value||'',date=$('ipData')?.value||'',mes=$('ipMes')?.value||'',ano=$('ipAno')?.value||'';return visibleIndividualSales().filter(x=>(!q||[x.cpf,x.name,x.phone,x.productName].join(' ').toUpperCase().includes(q))&&(!pdv||db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name===pdv)&&(!date||x.saleDate===date)&&(!mes||(x.saleDate||'').slice(5,7)===mes)&&(!ano||(x.saleDate||'').slice(0,4)===ano))}
 function renderIndividualSales(){if(!$('individualSalesBody'))return;const a=filteredIndividualSales();$('ipCount').textContent=a.length;$('ipValue').textContent=money(a.reduce((t,x)=>t+Number(x.value||0),0));$('ipCommission').textContent=money(a.reduce((t,x)=>t+Number(x.commission||0),0));$('individualSalesBody').innerHTML=a.map(x=>`<tr><td>${fmtDate(x.saleDate)}</td><td>${esc(x.cpf)}</td><td>${esc(x.name)}</td><td>${esc(x.phone)}</td><td>${esc(x.productName)}</td><td>${money(x.value)}</td><td>${money(x.commission)}</td><td>${esc(db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'-')}</td><td>${esc(db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'-')}</td><td>${esc(x.obs||'')}</td><td>${canEditIndividualSale(x)?`<button class="btn btn-secondary" onclick="openIndividualSale(${x.id})">Editar</button>`:''}${isAdmin()?`<button class="btn btn-danger" onclick="deleteIndividualSale(${x.id})">Excluir</button>`:''}</td></tr>`).join('')||'<tr><td colspan="11">Nenhuma venda encontrada.</td></tr>'}
-function clearIndividualFilters(){$('ipSearch').value='';$('ipPDV').value='';$('ipData').value='';renderIndividualSales()}
+function clearIndividualFilters(){$('ipSearch').value='';$('ipPDV').value='';$('ipData').value='';$('ipMes').value='';$('ipAno').value='';renderIndividualSales()}
 function canEditIndividualSale(x){return isAdmin()||isSupervisor()||Number(x.sellerId)===Number(current?.sellerId)}
 function openIndividualSale(id){
   const x=id?db.individualSales.find(v=>Number(v.id)===Number(id)):null;
@@ -801,9 +1206,9 @@ function openIndividualSale(id){
   $('modal').classList.remove('hidden');
 }
 function updateIndividualSaleValue(selected){const p=db.individualProducts.find(v=>Number(v.id)===Number(selected||$('isProduct')?.value));if($('isValue'))$('isValue').value=money(p?.value||0);if($('isCommission'))$('isCommission').value=money(p?.commission||0)}
-async function saveIndividualSale(id){try{const old=id?db.individualSales.find(v=>Number(v.id)===Number(id)):null;if(old&&!canEditIndividualSale(old))return alert('SEM PERMISSÃO.');const p=db.individualProducts.find(v=>Number(v.id)===Number($('isProduct').value));if(!p)return alert('SELECIONE UM PRODUTO.');const sellerId=current.role==='usuario'?current.sellerId:(Number($('isSeller')?.value)||old?.sellerId||current.sellerId);const pdvId=current.role==='usuario'?seller()?.pdvId:(Number($('isPdv').value)||old?.pdvId||seller()?.pdvId);if(!validateCPFField('isCpf',true,'isDocType'))return;const cpf=$('isCpf').value;const payload={cpf,name:$('isName').value.trim().toUpperCase(),phone:$('isPhone').value.trim(),product_id:p.id,product_name:p.name,value:Number(p.value||0),commission:Number(p.commission||0),seller_id:sellerId,pdv_id:pdvId,sale_date:$('isDate').value||today(),observation:$('isObs').value.trim()};if(!payload.cpf||!payload.name||!payload.phone||!sellerId||!pdvId)return alert('PREENCHA DOCUMENTO, NOME, TELEFONE, VENDEDOR E PDV.');$('isCpf').value=cpf;const q=id?sb.from('individual_sales').update(payload).eq('id',id):sb.from('individual_sales').insert(payload);const {error}=await q;if(error)throw error;closeModal();await loadDB();refresh()}catch(e){fail(e)}}
-async function deleteIndividualSale(id){if(!isAdmin())return alert('SOMENTE ADMIN PODE EXCLUIR VENDAS INDIVIDUAIS.');if(!confirm('EXCLUIR ESTA VENDA?'))return;const {error}=await sb.from('individual_sales').delete().eq('id',id);if(error)return fail(error);await loadDB();refresh()}
-function exportIndividualExcel(){if(!canAll())return alert('APENAS ADMIN E SUPERVISOR PODEM EXPORTAR.');const rows=filteredIndividualSales().map(x=>({DATA:x.saleDate,"CPF/CNPJ":x.cpf,NOME:x.name,TELEFONE:x.phone,PRODUTO:x.productName,VALOR:Number(x.value||0),COMISSAO:Number(x.commission||0),VENDEDOR:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'',PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'',OBSERVACAO:x.obs||''}));if(!rows.length)return alert('NÃO HÁ REGISTROS PARA EXPORTAR.');const ws=XLSX.utils.json_to_sheet(rows),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'VENDAS INDIVIDUAIS');XLSX.writeFile(wb,'vendas_individuais_'+today()+'.xlsx')}
+async function saveIndividualSale(id){try{const old=id?db.individualSales.find(v=>Number(v.id)===Number(id)):null;if(old&&!canEditIndividualSale(old))return alert('SEM PERMISSÃO.');const p=db.individualProducts.find(v=>Number(v.id)===Number($('isProduct').value));if(!p)return alert('SELECIONE UM PRODUTO.');const sellerId=current.role==='usuario'?current.sellerId:(Number($('isSeller')?.value)||old?.sellerId||current.sellerId);const pdvId=current.role==='usuario'?seller()?.pdvId:(Number($('isPdv').value)||old?.pdvId||seller()?.pdvId);if(!validateCPFField('isCpf',true,'isDocType'))return;const cpf=$('isCpf').value;const payload={cpf,name:$('isName').value.trim().toUpperCase(),phone:$('isPhone').value.trim(),product_id:p.id,product_name:p.name,value:Number(p.value||0),commission:Number(p.commission||0),seller_id:sellerId,pdv_id:pdvId,sale_date:$('isDate').value||today(),observation:$('isObs').value.trim()};if(!payload.cpf||!payload.name||!payload.phone||!sellerId||!pdvId)return alert('PREENCHA DOCUMENTO, NOME, TELEFONE, VENDEDOR E PDV.');$('isCpf').value=cpf;const q=id?sb.from('individual_sales').update(payload).eq('id',id):sb.from('individual_sales').insert(payload);const {error}=await q;if(error)throw error;closeModal();await reloadAllData()}catch(e){fail(e)}}
+async function deleteIndividualSale(id){if(!isAdmin())return alert('SOMENTE ADMIN PODE EXCLUIR VENDAS INDIVIDUAIS.');if(!confirm('EXCLUIR ESTA VENDA?'))return;const {error}=await sb.from('individual_sales').delete().eq('id',id);if(error)return fail(error);await reloadAllData()}
+function exportIndividualExcel(){if(!canAll())return alert('APENAS ADMIN E SUPERVISOR PODEM EXPORTAR.');const rows=filteredIndividualSales().map(x=>({DATA:x.saleDate,"CPF/CNPJ":x.cpf,NOME:x.name,TELEFONE:x.phone,PRODUTO:x.productName,VALOR:Number(x.value||0),COMISSAO:Number(x.commission||0),VENDEDOR:db.sellers.find(s=>Number(s.id)===Number(x.sellerId))?.name||'',PDV:db.pdvs.find(p=>Number(p.id)===Number(x.pdvId))?.name||'',OBSERVACAO:x.obs||''}));if(!rows.length)return alert('NÃO HÁ REGISTROS PARA EXPORTAR.');openExportPassword(()=>{const ws=XLSX.utils.json_to_sheet(rows),wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'VENDAS INDIVIDUAIS');XLSX.writeFile(wb,'vendas_individuais_'+today()+'.xlsx')})}
 
 function closeModal(){$('modal').classList.add('hidden')}
 $('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
